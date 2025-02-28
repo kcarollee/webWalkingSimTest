@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.min.js"></script>
+        <script src="https://cdn.rawgit.com/mrdoob/stats.js/r17/build/stats.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css" />
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    </head>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.166.1/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.166.1/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module" src="js/Controls.js"></script>
+    <script type="module" src="js/FirstPersonControls.js"></script>
+    <script src="./js/sceneDef.js"></script>
+    <script type="module" src="main.js"></script>
+    <body>
+        <div class="temp-overlay">
+            <img class="band-logo" src="./assets/homeImages/band_logo.png" />
+            <div class="temp-overlay-text">
+                <a class="number-link" data-number="1">&lt;---Track_01 : 시계열---&gt;</a>
+                <a class="number-link" data-number="2">&lt;---Track_02 : 초록광선---&gt;</a>
+                <a class="number-link" data-number="3">&lt;---Track_03 : 소각소각---&gt;</a>
+                <a class="number-link" data-number="4">&lt;---Track_04 : 팬---&gt;</a>
+                <a class="number-link" data-number="5">&lt;---Track_05 : 에땅도네---&gt;</a>
+                <a class="number-link" data-number="6">&lt;---Track_06 : 멍---&gt;</a>
+                <a class="number-link" data-number="7">&lt;---Track_07 : 여러가지---&gt;</a>
+                <a class="number-link" data-number="8">&lt;---Track_08 : 레몬홍차---&gt;</a>
+                <a class="number-link" data-number="9">&lt;---Track_09 : 물고기---&gt;</a>
+                <a class="number-link" data-number="10">&lt;---Track_10 : KILL THE MONKEY---&gt;</a>
+                <a class="number-link" data-number="11">&lt;---Track_11 : 982---&gt;</a>
+                <a class="number-link" data-number="12">&lt;---Track_12 : RUSH HOUR---&gt;</a>
+            </div>
+        </div>
+        <canvas id="c"></canvas>
+    </body>
+
+    <script></script>
+</html>
