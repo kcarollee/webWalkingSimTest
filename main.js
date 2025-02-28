@@ -9,9 +9,6 @@ function main() {
     const canvas = document.querySelector("#c");
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
     renderer.outputColorSpace = THREE.SRGBColorSpace;
-    // AUDIO
-    // load sound files
-    const audioLoader = new THREE.AudioLoader();
 
     //GUI
     const gui = new dat.GUI();
@@ -21,6 +18,7 @@ function main() {
         };
     })();
     gui.add(controls, "outputObj");
+
     //CAMERA
     const fov = 90;
     const aspect = 2; // display aspect of the canvas
@@ -30,6 +28,14 @@ function main() {
 
     const initPlayerPos = new THREE.Vector3(0.6, 0.01, -0.1);
     camera.position.copy(initPlayerPos);
+
+    // AUDIO
+    // load sound files
+    const audioListener = new THREE.AudioListener();
+    const audioLoader = new THREE.AudioLoader();
+    const sound = new THREE.Audio(audioListener);
+    sound.setLoop(true);
+    camera.add(audioListener);
 
     // CONTROLS
     const playerControls = new PointerLockControls(camera, document.body);
@@ -57,10 +63,18 @@ function main() {
             const pathColliderURL = currentSceneDef.pathColliderURL;
             const pathModelURL = currentSceneDef.pathModelURL;
             const modelURLArr = currentSceneDef.modelURLArr;
+            const trackURL = currentSceneDef.trackURL;
 
             sceneLoader.loadModels(modelURLArr, gltfLoader);
             sceneLoader.loadPathModel(pathModelURL, gltfLoader);
             sceneLoader.loadPathColliderModel(pathColliderURL, gltfLoader);
+
+            audioLoader.load(trackURL, (buffer) => {
+                sound.setBuffer(buffer);
+                sound.setLoop(true);
+                sound.setVolume(0.5);
+                sound.play();
+            });
 
             playerControls.lock();
         });
