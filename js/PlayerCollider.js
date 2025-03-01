@@ -82,6 +82,10 @@ export default class PlayerCollider {
     updatePlayer(camera) {
         camera.position.copy(this.playerPhysicsBody.position);
     }
+
+    setPosition(posX, posY, posZ) {
+        this.playerPhysicsBody.position.set(posX, posY, posZ);
+    }
 }
 
 PlayerCollider.moveDirection = {

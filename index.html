@@ -15,30 +15,79 @@
             }
         }
     </script>
-    <script type="module" src="js/Controls.js"></script>
-    <script type="module" src="js/FirstPersonControls.js"></script>
+    <script src="./js/CustomShader.js"></script>
+    <!-- <script src="./js/SceneBuilder.js"></script> -->
     <script src="./js/sceneDef.js"></script>
     <script type="module" src="main.js"></script>
     <body>
         <div class="temp-overlay">
             <img class="band-logo" src="./assets/homeImages/band_logo.png" />
             <div class="temp-overlay-text">
-                <a class="number-link" data-number="1">&lt;---Track_01 : 시계열---&gt;</a>
-                <a class="number-link" data-number="2">&lt;---Track_02 : 초록광선---&gt;</a>
-                <a class="number-link" data-number="3">&lt;---Track_03 : 소각소각---&gt;</a>
-                <a class="number-link" data-number="4">&lt;---Track_04 : 팬---&gt;</a>
-                <a class="number-link" data-number="5">&lt;---Track_05 : 에땅도네---&gt;</a>
-                <a class="number-link" data-number="6">&lt;---Track_06 : 멍---&gt;</a>
-                <a class="number-link" data-number="7">&lt;---Track_07 : 여러가지---&gt;</a>
-                <a class="number-link" data-number="8">&lt;---Track_08 : 레몬홍차---&gt;</a>
-                <a class="number-link" data-number="9">&lt;---Track_09 : 물고기---&gt;</a>
-                <a class="number-link" data-number="10">&lt;---Track_10 : KILL THE MONKEY---&gt;</a>
-                <a class="number-link" data-number="11">&lt;---Track_11 : 982---&gt;</a>
-                <a class="number-link" data-number="12">&lt;---Track_12 : RUSH HOUR---&gt;</a>
+                <a class="number-link" data-number="1"></a>
+                <a class="number-link" data-number="2"></a>
+                <a class="number-link" data-number="3"></a>
+                <a class="number-link" data-number="4"></a>
+                <a class="number-link" data-number="5"></a>
+                <a class="number-link" data-number="6"></a>
+                <a class="number-link" data-number="7"></a>
+                <a class="number-link" data-number="8"></a>
+                <a class="number-link" data-number="9"></a>
+                <a class="number-link" data-number="10"></a>
+                <a class="number-link" data-number="11"></a>
+                <a class="number-link" data-number="12"></a>
             </div>
         </div>
         <canvas id="c"></canvas>
     </body>
 
-    <script></script>
+    <script>
+        const trackListStrings = [
+            "<---Track_01 : 시계열--->",
+            "<---Track_02 : 초록광선--->",
+            "<---Track_03 : 소각소각--->",
+            "<---Track_04 : 팬--->",
+            "<---Track_05 : 에땅도네--->",
+            "<---Track_06 : 멍--->",
+            "<---Track_07 : 여러가지--->",
+            "<---Track_08 : 레몬홍차--->",
+            "<---Track_09 : 물고기--->",
+            "<---Track_10 : KILL THE MONKEY--->",
+            "<---Track_11 : 982--->",
+            "<---Track_12 : RUSH HOUR--->",
+        ];
+
+        let stringIndices = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+        let stringDoneLoading = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        function triggerTrackListAnimation() {
+            // console.log(allTrackListStringsLoaded());
+            document.querySelectorAll(".number-link").forEach((entry, i) => {
+                if (stringIndices[i] < trackListStrings[i].length) {
+                    entry.innerHTML += trackListStrings[i][stringIndices[i]];
+                    stringIndices[i]++;
+                } else {
+                    stringDoneLoading[i] = 1;
+                    return;
+                }
+            });
+            setTimeout(triggerTrackListAnimation, 50);
+        }
+
+        function resetTrackListStrings() {
+            document.querySelectorAll(".number-link").forEach((entry) => {
+                entry.innerHTML = "";
+            });
+            stringIndices = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            stringDoneLoading = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        }
+
+        function allTrackListStringsLoaded() {
+            let sum = stringDoneLoading.reduce((a, c) => {
+                return a + c;
+            }, 0);
+            return sum == trackListStrings.length;
+        }
+
+        triggerTrackListAnimation();
+    </script>
 </html>

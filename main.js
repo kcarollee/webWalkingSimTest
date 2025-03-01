@@ -2,6 +2,11 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { PointerLockControls } from "three/addons/controls/PointerLockControls.js";
 
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
+import { CopyShader } from "three/addons/shaders/CopyShader.js";
+
 import SceneLoader from "./js/SceneLoader.js";
 import PlayerCollider from "./js/PlayerCollider.js";
 
@@ -12,12 +17,23 @@ function main() {
 
     //GUI
     const gui = new dat.GUI();
+    let shaderViewOn = true;
     const controls = new (function () {
         this.outputObj = function () {
             scene.children.forEach((c) => console.log(c));
         };
     })();
+
+    const debugSettings = {
+        shaderViewOn: true,
+        debugPathViewOn: false,
+    };
+
     gui.add(controls, "outputObj");
+    gui.add(debugSettings, "shaderViewOn");
+    gui.add(debugSettings, "debugPathViewOn").onChange((value) => {
+        sceneLoader.playerPathColliderDebugMaterial.visible = value;
+    });
 
     //CAMERA
     const fov = 90;
@@ -48,16 +64,33 @@ function main() {
     const playerCollider = new PlayerCollider(new THREE.Vector3(0.6, 0.01, -0.1));
 
     loadingManager.onLoad = function () {
+        console.log("HUH");
         sceneLoader.connectPlayerCollider(playerCollider);
-        render();
+        // render();
     };
 
-    let currentTrackNumber;
+    let currentTrackNumber = -1;
     document.querySelectorAll(".number-link").forEach((link) => {
         link.addEventListener("click", function (event) {
             event.preventDefault();
 
+            if (!allTrackListStringsLoaded()) return;
             const number = this.getAttribute("data-number");
+            if (currentTrackNumber == number) {
+                console.log("RESUME");
+                playerControls.lock();
+                sound.play();
+                return;
+            }
+
+            // if there is a scene and physics body to be cleared
+            if (currentTrackNumber != -1) {
+                console.log("CLEAR SCENE");
+                sound.stop();
+                sceneLoader.clearScene();
+                sceneLoader.clearPhysicsBody();
+            }
+
             currentTrackNumber = parseInt(number);
             const currentSceneDef = sceneDef[currentTrackNumber - 1];
             const pathColliderURL = currentSceneDef.pathColliderURL;
@@ -65,9 +98,13 @@ function main() {
             const modelURLArr = currentSceneDef.modelURLArr;
             const trackURL = currentSceneDef.trackURL;
 
+            sceneLoader.buildScene(currentTrackNumber - 1);
             sceneLoader.loadModels(modelURLArr, gltfLoader);
             sceneLoader.loadPathModel(pathModelURL, gltfLoader);
             sceneLoader.loadPathColliderModel(pathColliderURL, gltfLoader);
+
+            const initPos = currentSceneDef.initPos;
+            playerCollider.setPosition(initPos[0], initPos[1], initPos[2]);
 
             audioLoader.load(trackURL, (buffer) => {
                 sound.setBuffer(buffer);
@@ -75,8 +112,8 @@ function main() {
                 sound.setVolume(0.5);
                 sound.play();
             });
-
             playerControls.lock();
+            // document.body.requestPointerLock();
         });
     });
 
@@ -85,23 +122,29 @@ function main() {
     });
 
     playerControls.addEventListener("unlock", () => {
+        sound.pause();
+        resetTrackListStrings();
         overlay.style.display = "flex";
     });
 
-    // let testPathColliderURL = "./assets/stage_1/player path collider/output2.gltf";
-    // let testPathModelURL = "./assets/stage_1/player path/stage_1_path.gltf";
-    // let testModelUrlArr = ["./assets/stage_1/models/output_3.gltf", "./assets/stage_1/models/output_4.gltf"];
-
-    // const playerCollider = new PlayerCollider(new THREE.Vector3(0.6, 0.01, -0.1));
-    // sceneLoader.loadModels(testModelUrlArr, gltfLoader);
-    // sceneLoader.loadPathModel(testPathModelURL, gltfLoader);
-    // sceneLoader.loadPathColliderModel(testPathColliderURL, gltfLoader);
-
     function updatePhysics(deltaTime) {
         sceneLoader.updatePhysics(deltaTime);
+        sceneLoader.updateScene();
         playerCollider.movePlayer(camera);
         playerCollider.updatePlayer(camera);
     }
+
+    // POST-PROCESSING
+    const composer = new EffectComposer(renderer);
+    const renderPass = new RenderPass(sceneLoader.getScene(), camera);
+    const shaderPass = new ShaderPass(CustomShader);
+
+    composer.setSize(window.innerWidth, window.innerHeight);
+    composer.setPixelRatio(window.devicePixelRatio);
+
+    composer.addPass(renderPass);
+    composer.addPass(shaderPass);
+    composer.addPass(new ShaderPass(CopyShader));
 
     const clock = new THREE.Clock();
 
@@ -115,7 +158,10 @@ function main() {
             camera.updateProjectionMatrix();
         }
 
-        renderer.render(sceneLoader.getScene(), camera);
+        // renderer.render(sceneLoader.getScene(), camera);
+
+        if (debugSettings.shaderViewOn) composer.render();
+        else renderer.render(sceneLoader.getScene(), camera);
 
         requestAnimationFrame(render);
     }

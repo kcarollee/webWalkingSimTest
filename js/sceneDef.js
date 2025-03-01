@@ -5,6 +5,7 @@ const sceneDef = [
         pathModelURL: "./assets/stage_1/player path/stage_1_path.gltf",
         modelURLArr: ["./assets/stage_1/models/output_3.gltf", "./assets/stage_1/models/output_4.gltf"],
         trackURL: "./assets/audio/track_1.mp3",
+        initPos: [0.6, 0.01, -0.1],
     },
     {
         sceneNumber: 2,
@@ -12,6 +13,7 @@ const sceneDef = [
         pathModelURL: "./assets/stage_1/player path/stage_1_path.gltf",
         modelURLArr: ["./assets/stage_1/models/output_3.gltf", "./assets/stage_1/models/output_4.gltf"],
         trackURL: "./assets/audio/track_1.mp3",
+        initPos: [0.6, 0.01, -0.1],
     },
     {
         sceneNumber: 3,
@@ -19,6 +21,7 @@ const sceneDef = [
         pathModelURL: "./assets/stage_1/player path/stage_1_path.gltf",
         modelURLArr: ["./assets/stage_1/models/output_3.gltf", "./assets/stage_1/models/output_4.gltf"],
         trackURL: "./assets/audio/track_1.mp3",
+        initPos: [0.6, 0.01, -0.1],
     },
     {
         sceneNumber: 4,
@@ -26,6 +29,7 @@ const sceneDef = [
         pathModelURL: "./assets/stage_1/player path/stage_1_path.gltf",
         modelURLArr: ["./assets/stage_1/models/output_3.gltf", "./assets/stage_1/models/output_4.gltf"],
         trackURL: "./assets/audio/track_1.mp3",
+        initPos: [0.6, 0.01, -0.1],
     },
     {
         sceneNumber: 5,
@@ -33,6 +37,7 @@ const sceneDef = [
         pathModelURL: "./assets/stage_1/player path/stage_1_path.gltf",
         modelURLArr: ["./assets/stage_1/models/output_3.gltf", "./assets/stage_1/models/output_4.gltf"],
         trackURL: "./assets/audio/track_1.mp3",
+        initPos: [0.6, 0.01, -0.1],
     },
     {
         sceneNumber: 6,
@@ -40,6 +45,7 @@ const sceneDef = [
         pathModelURL: "./assets/stage_1/player path/stage_1_path.gltf",
         modelURLArr: ["./assets/stage_1/models/output_3.gltf", "./assets/stage_1/models/output_4.gltf"],
         trackURL: "./assets/audio/track_1.mp3",
+        initPos: [0.6, 0.01, -0.1],
     },
     {
         sceneNumber: 7,
@@ -47,6 +53,7 @@ const sceneDef = [
         pathModelURL: "./assets/stage_1/player path/stage_1_path.gltf",
         modelURLArr: ["./assets/stage_1/models/output_3.gltf", "./assets/stage_1/models/output_4.gltf"],
         trackURL: "./assets/audio/track_1.mp3",
+        initPos: [0.6, 0.01, -0.1],
     },
     {
         sceneNumber: 8,
@@ -54,6 +61,7 @@ const sceneDef = [
         pathModelURL: "./assets/stage_1/player path/stage_1_path.gltf",
         modelURLArr: ["./assets/stage_1/models/output_3.gltf", "./assets/stage_1/models/output_4.gltf"],
         trackURL: "./assets/audio/track_1.mp3",
+        initPos: [0.6, 0.01, -0.1],
     },
     {
         sceneNumber: 9,
@@ -61,6 +69,7 @@ const sceneDef = [
         pathModelURL: "./assets/stage_1/player path/stage_1_path.gltf",
         modelURLArr: ["./assets/stage_1/models/output_3.gltf", "./assets/stage_1/models/output_4.gltf"],
         trackURL: "./assets/audio/track_1.mp3",
+        initPos: [0.6, 0.01, -0.1],
     },
     {
         sceneNumber: 10,
@@ -68,6 +77,7 @@ const sceneDef = [
         pathModelURL: "./assets/stage_1/player path/stage_1_path.gltf",
         modelURLArr: ["./assets/stage_1/models/output_3.gltf", "./assets/stage_1/models/output_4.gltf"],
         trackURL: "./assets/audio/track_1.mp3",
+        initPos: [0.6, 0.01, -0.1],
     },
     {
         sceneNumber: 11,
@@ -75,6 +85,7 @@ const sceneDef = [
         pathModelURL: "./assets/stage_1/player path/stage_1_path.gltf",
         modelURLArr: ["./assets/stage_1/models/output_3.gltf", "./assets/stage_1/models/output_4.gltf"],
         trackURL: "./assets/audio/track_1.mp3",
+        initPos: [0.6, 0.01, -0.1],
     },
     {
         sceneNumber: 12,
@@ -82,5 +93,6 @@ const sceneDef = [
         pathModelURL: "./assets/stage_1/player path/stage_1_path.gltf",
         modelURLArr: ["./assets/stage_1/models/output_3.gltf", "./assets/stage_1/models/output_4.gltf"],
         trackURL: "./assets/audio/track_1.mp3",
+        initPos: [0.6, 0.01, -0.1],
     },
 ];

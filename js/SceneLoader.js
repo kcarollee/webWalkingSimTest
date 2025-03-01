@@ -1,20 +1,61 @@
 import * as THREE from "three";
 import * as CANNON from "https://cdn.skypack.dev/cannon-es";
 
-function sceneDef1(scene) {}
+class SceneBuilder {
+    constructor() {
+        this.scene = null;
+    }
 
-const sceneArr = [sceneDef1, sceneDef1];
+    setScene(scene) {
+        this.scene = scene;
+    }
+
+    // lights, background color, etc
+    defineScene() {}
+
+    // transformations
+    updateScene() {}
+}
+
+const sceneBuilder1 = new SceneBuilder();
+sceneBuilder1.defineScene = function () {
+    this.scene.background = new THREE.Color(0xffffff);
+    this.ambientLight = new THREE.AmbientLight(0xffffff);
+    this.scene.add(this.ambientLight);
+
+    this.pointLight = new THREE.PointLight();
+    this.scene.add(this.pointLight);
+};
+sceneBuilder1.updateScene = () => {};
+
+const sceneBuilderArr = [
+    sceneBuilder1,
+    sceneBuilder1,
+    sceneBuilder1,
+    sceneBuilder1,
+    sceneBuilder1,
+    sceneBuilder1,
+    sceneBuilder1,
+    sceneBuilder1,
+    sceneBuilder1,
+    sceneBuilder1,
+    sceneBuilder1,
+    sceneBuilder1,
+];
+
 export default class SceneLoader {
     constructor() {
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0xffffff);
-        this.ambientLight = new THREE.AmbientLight(0xffffff);
-        this.scene.add(this.ambientLight);
+        this.sceneBuilder = null;
+        // this.scene.background = new THREE.Color(0xffffff);
+        // this.ambientLight = new THREE.AmbientLight(0xffffff);
+        // this.scene.add(this.ambientLight);
 
-        this.pointLight = new THREE.PointLight();
-        this.scene.add(this.pointLight);
+        // this.pointLight = new THREE.PointLight();
+        // this.scene.add(this.pointLight);
         this.physicsWorld = new CANNON.World();
-        this.playerPathCollider;
+        // this.playerCollider;
+        // this.playerPathCollider;
 
         this.playerCollider;
         this.playerPath;
@@ -39,11 +80,21 @@ export default class SceneLoader {
             color: 0x0000ff,
             side: THREE.DoubleSide,
             wireframe: true,
-            // wireframe: true,
-            // visible: false,
         });
 
         this._initPhysics();
+    }
+
+    buildScene(sceneNumber) {
+        this.sceneBuilder = sceneBuilderArr[sceneNumber];
+        this.sceneBuilder.setScene(this.scene);
+        console.log(this.sceneBuilder);
+        this.sceneBuilder.defineScene();
+    }
+
+    updateScene() {
+        if (this.sceneBuilder == null) return;
+        this.sceneBuilder.updateScene();
     }
 
     loadModels(modelURLArr, gltfLoader) {
@@ -96,7 +147,7 @@ export default class SceneLoader {
                     child.material = this.playerPathColliderDebugMaterial;
                 }
             });
-            this.playerPathCollider = gltf.scene;
+            // this.playerPathCollider = gltf.scene;
             const playerPathColliderMesh = gltf.scene.children[0];
             this._createPathPhysics(playerPathColliderMesh);
 
@@ -121,12 +172,13 @@ export default class SceneLoader {
 
     connectPlayerCollider(playerCollider) {
         this.physicsWorld.addBody(playerCollider.getPlayerPhysicsBody());
+        this.playerCollider = playerCollider;
     }
 
     _initPhysics() {
         this.physicsWorld.gravity.set(0, -9.81, 0);
         this.physicsWorld.broadphase = new CANNON.SAPBroadphase(this.physicsWorld);
-        this.physicsWorld.solver.iterations = 20;
+        this.physicsWorld.solver.iterations = 50;
     }
 
     updatePhysics(deltaTime) {
@@ -139,5 +191,10 @@ export default class SceneLoader {
 
     clearScene() {
         this.scene.clear();
+    }
+
+    clearPhysicsBody() {
+        this.physicsWorld.removeBody(this.pathPhysicsBody);
+        this.physicsWorld.removeBody(this.playerCollider.getPlayerPhysicsBody());
     }
 }
