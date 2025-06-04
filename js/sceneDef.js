@@ -9,8 +9,8 @@ const sceneDef = [
     },
     {
         sceneNumber: 2,
-        pathColliderURL: "./assets/stage_1/player path collider/output2.gltf",
-        pathModelURL: "./assets/stage_1/player path/stage_1_path.gltf",
+        pathColliderURL: "./assets/stage_2/player path collider/output2.gltf",
+        pathModelURL: "./assets/stage_2/player path/output1.gltf",
         modelURLArr: ["./assets/stage_1/models/output_3.gltf", "./assets/stage_1/models/output_4.gltf"],
         trackURL: "./assets/audio/track_1.mp3",
         initPos: [0.6, 0.01, -0.1],

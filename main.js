@@ -51,6 +51,7 @@ function main() {
     const audioLoader = new THREE.AudioLoader();
     const sound = new THREE.Audio(audioListener);
     sound.setLoop(true);
+    sound.setVolume(0);
     camera.add(audioListener);
 
     // CONTROLS
@@ -92,6 +93,7 @@ function main() {
             }
 
             currentTrackNumber = parseInt(number);
+            console.log("CURRENT SCENE: ", currentTrackNumber);
             const currentSceneDef = sceneDef[currentTrackNumber - 1];
             const pathColliderURL = currentSceneDef.pathColliderURL;
             const pathModelURL = currentSceneDef.pathModelURL;
@@ -109,7 +111,7 @@ function main() {
             audioLoader.load(trackURL, (buffer) => {
                 sound.setBuffer(buffer);
                 sound.setLoop(true);
-                sound.setVolume(0.5);
+                sound.setVolume(0.0);
                 sound.play();
             });
             playerControls.lock();
