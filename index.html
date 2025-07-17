@@ -3,6 +3,7 @@
     <head>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.min.js"></script>
         <script src="https://cdn.rawgit.com/mrdoob/stats.js/r17/build/stats.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.7/gsap.min.js"></script>
         <link rel="stylesheet" type="text/css" href="style.css" />
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
@@ -16,54 +17,183 @@
         }
     </script>
     <script src="./js/CustomShader.js"></script>
-    <!-- <script src="./js/SceneBuilder.js"></script> -->
+
     <script src="./js/sceneDef.js"></script>
+
     <script type="module" src="main.js"></script>
     <body>
         <div class="temp-overlay">
             <img class="band-logo" src="./assets/homeImages/band_logo.png" />
             <div class="temp-overlay-text">
-                <a class="number-link" data-number="1"></a>
-                <a class="number-link" data-number="2"></a>
-                <a class="number-link" data-number="3"></a>
-                <a class="number-link" data-number="4"></a>
-                <a class="number-link" data-number="5"></a>
-                <a class="number-link" data-number="6"></a>
-                <a class="number-link" data-number="7"></a>
-                <a class="number-link" data-number="8"></a>
-                <a class="number-link" data-number="9"></a>
-                <a class="number-link" data-number="10"></a>
-                <a class="number-link" data-number="11"></a>
-                <a class="number-link" data-number="12"></a>
+                <div class="number-link">
+                    <span class="chapter-name"></span>
+                    <div class="dropdown">
+                        <div class="track" data-scene="0" data-next="1" data-chapter="1" data-status="CLEARED">
+                            초록광선
+                        </div>
+                        <div
+                            class="track"
+                            data-scene="1"
+                            data-next="2"
+                            data-chapter="1"
+                            data-status="UNCLEARED"
+                            style="color: lightslategray"
+                        >
+                            레몬홍차
+                        </div>
+                        <div
+                            class="track"
+                            data-scene="2"
+                            data-next="3"
+                            data-chapter="1"
+                            data-status="UNCLEARED"
+                            style="color: lightslategray"
+                        >
+                            여러가지
+                        </div>
+                        <div
+                            class="track"
+                            data-scene="3"
+                            data-next="4"
+                            data-chapter="1"
+                            data-status="UNCLEARED"
+                            style="color: lightslategray"
+                        >
+                            시계열
+                        </div>
+                        <div
+                            class="track"
+                            data-scene="4"
+                            data-next="0"
+                            data-chapter="1"
+                            data-status="UNCLEARED"
+                            style="color: lightslategray"
+                        >
+                            꼬리뼈
+                        </div>
+                    </div>
+                </div>
+                <div class="number-link" style="color: lightslategray" data-chapter="2">
+                    <span class="chapter-name"></span>
+                    <div class="dropdown">
+                        <div
+                            class="track"
+                            data-scene="5"
+                            data-next="6"
+                            data-chapter="2"
+                            data-status="UNCLEARED"
+                            style="color: lightslategray"
+                        >
+                            소녀
+                        </div>
+                        <div
+                            class="track"
+                            data-scene="6"
+                            data-next="7"
+                            data-chapter="2"
+                            data-status="UNCLEARED"
+                            style="color: lightslategray"
+                        >
+                            에땅도네
+                        </div>
+                        <div
+                            class="track"
+                            data-scene="7"
+                            data-next="8"
+                            data-chapter="2"
+                            data-status="UNCLEARED"
+                            style="color: lightslategray"
+                        >
+                            멍
+                        </div>
+                        <div
+                            class="track"
+                            data-scene="8"
+                            data-next="5"
+                            data-chapter="2"
+                            data-status="UNCLEARED"
+                            style="color: lightslategray"
+                        >
+                            소각소각
+                        </div>
+                    </div>
+                </div>
+                <div class="number-link" style="color: lightslategray" data-chapter="3">
+                    <span class="chapter-name"></span>
+                    <div class="dropdown">
+                        <div
+                            class="track"
+                            data-scene="9"
+                            data-next="10"
+                            data-chapter="3"
+                            data-status="UNCLEARED"
+                            style="color: lightslategray"
+                        >
+                            러시아워
+                        </div>
+                        <div
+                            class="track"
+                            data-scene="10"
+                            data-next="11"
+                            data-chapter="3"
+                            data-status="UNCLEARED"
+                            style="color: lightslategray"
+                        >
+                            KILL THE MONKEY
+                        </div>
+                        <div
+                            class="track"
+                            data-scene="11"
+                            data-next="12"
+                            data-chapter="3"
+                            data-status="UNCLEARED"
+                            style="color: lightslategray"
+                        >
+                            KAMIKAZE BLOOM
+                        </div>
+                        <div
+                            class="track"
+                            data-scene="12"
+                            data-next="9"
+                            data-chapter="3"
+                            data-status="UNCLEARED"
+                            style="color: lightslategray"
+                        >
+                            982
+                        </div>
+                    </div>
+                </div>
+                <!-- <a class="number-link" data-scene="4" data-stage="1"></a>
+                <a class="number-link" data-scene="5" data-stage="2"></a>
+                <a class="number-link" data-scene="6" data-stage="2"></a>
+                <a class="number-link" data-scene="7" data-stage="2"></a>
+                <a class="number-link" data-scene="8" data-stage="2"></a>
+                <a class="number-link" data-scene="9" data-stage="3"></a>
+                <a class="number-link" data-scene="10" data-stage="3"></a>
+                <a class="number-link" data-scene="11" data-stage="3"></a>
+                <a class="number-link" data-scene="12" data-stage="3"></a> -->
             </div>
         </div>
+        <canvas id="spectrumCanvas" width="300" height="100"></canvas>
+
         <canvas id="c"></canvas>
     </body>
 
     <script>
-        const trackListStrings = [
-            "<---Track_01 : 시계열--->",
-            "<---Track_02 : 초록광선--->",
-            "<---Track_03 : 소각소각--->",
-            "<---Track_04 : 팬--->",
-            "<---Track_05 : 에땅도네--->",
-            "<---Track_06 : 멍--->",
-            "<---Track_07 : 여러가지--->",
-            "<---Track_08 : 레몬홍차--->",
-            "<---Track_09 : 물고기--->",
-            "<---Track_10 : KILL THE MONKEY--->",
-            "<---Track_11 : 982--->",
-            "<---Track_12 : RUSH HOUR--->",
+        const chapterListStrings = [
+            "[---CHAPTER_01 : KICK---]",
+            "[---CHAPTER_02 : FUCK---]",
+            "[---CHAPTER_03 : KILL---]",
         ];
 
-        let stringIndices = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        let stringIndices = [0, 0, 0];
 
-        let stringDoneLoading = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        let stringDoneLoading = [0, 0, 0];
         function triggerTrackListAnimation() {
             // console.log(allTrackListStringsLoaded());
-            document.querySelectorAll(".number-link").forEach((entry, i) => {
-                if (stringIndices[i] < trackListStrings[i].length) {
-                    entry.innerHTML += trackListStrings[i][stringIndices[i]];
+            document.querySelectorAll(".chapter-name").forEach((entry, i) => {
+                if (stringIndices[i] < chapterListStrings[i].length) {
+                    entry.textContent += chapterListStrings[i][stringIndices[i]];
                     stringIndices[i]++;
                 } else {
                     stringDoneLoading[i] = 1;
@@ -74,18 +204,18 @@
         }
 
         function resetTrackListStrings() {
-            document.querySelectorAll(".number-link").forEach((entry) => {
-                entry.innerHTML = "";
+            document.querySelectorAll(".chapter-name").forEach((entry) => {
+                entry.textContent = "";
             });
-            stringIndices = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-            stringDoneLoading = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            stringIndices = [0, 0, 0];
+            stringDoneLoading = [0, 0, 0];
         }
 
         function allTrackListStringsLoaded() {
             let sum = stringDoneLoading.reduce((a, c) => {
                 return a + c;
             }, 0);
-            return sum == trackListStrings.length;
+            return sum == chapterListStrings.length;
         }
 
         triggerTrackListAnimation();

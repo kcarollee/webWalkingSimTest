@@ -20,16 +20,18 @@ export default class PlayerCollider {
         const height = 0.01;
 
         // Create a cylinder and spheres for capsule shape
-        const cylinder = new CANNON.Cylinder(radius, radius, height, 8);
+        //const cylinder = new CANNON.Cylinder(radius, radius, height, 8);
         const sphereTop = new CANNON.Sphere(radius);
-        const sphereBottom = new CANNON.Sphere(radius);
+        //const sphereBottom = new CANNON.Sphere(radius);
 
         this.playerPhysicsBody = new CANNON.Body({ mass: 1 });
 
         // Add shapes
-        this.playerPhysicsBody.addShape(cylinder, new CANNON.Vec3(0, 0, 0));
-        this.playerPhysicsBody.addShape(sphereTop, new CANNON.Vec3(0, height / 2, 0));
-        this.playerPhysicsBody.addShape(sphereBottom, new CANNON.Vec3(0, -height / 2, 0));
+        //this.playerPhysicsBody.addShape(cylinder, new CANNON.Vec3(0, 0, 0));
+        // this.playerPhysicsBody.addShape(sphereTop, new CANNON.Vec3(0, height / 2, 0));
+        //this.playerPhysicsBody.addShape(sphereBottom, new CANNON.Vec3(0, -height / 2, 0));
+
+        this.playerPhysicsBody.addShape(sphereTop, new CANNON.Vec3(0, 0, 0));
 
         // Set initial position
         this.playerPhysicsBody.position.set(this.initPos.x, this.initPos.y, this.initPos.z);
@@ -56,7 +58,8 @@ export default class PlayerCollider {
     movePlayer(camera) {
         let forward = new THREE.Vector3();
         camera.getWorldDirection(forward);
-        forward.y = 0; // Keep movement horizontal
+        //forward.y = 0; // Keep movement horizontal
+
         forward.normalize();
 
         let right = new THREE.Vector3();
@@ -76,23 +79,40 @@ export default class PlayerCollider {
             );
         }
 
-        this.playerPhysicsBody.velocity.set(velocity.x, this.playerPhysicsBody.velocity.y, velocity.z);
+        if (PlayerCollider.moveDirection.up !== 0) {
+            velocity.vadd(right.multiplyScalar(PlayerCollider.moveDirection.up * PlayerCollider.moveSpeed), velocity);
+        }
+
+        this.playerPhysicsBody.velocity.set(velocity.x, velocity.y, velocity.z);
     }
 
     updatePlayer(camera) {
         camera.position.copy(this.playerPhysicsBody.position);
+        camera.position.y += 0.05;
     }
 
     setPosition(posX, posY, posZ) {
         this.playerPhysicsBody.position.set(posX, posY, posZ);
+    }
+
+    reset() {
+        PlayerCollider.moveDirection.forward = 0;
+        PlayerCollider.moveDirection.right = 0;
+
+        this.playerPhysicsBody.velocity.set(0, 0, 0);
+        this.playerPhysicsBody.angularVelocity.set(0, 0, 0);
+        // this.playerPhysicsBody.force.set(0, 0, 0);
+        // this.playerPhysicsBody.torque.set(0, 0, 0);
+        // this.playerPhysicsBody.quaternion.set(0, 0, 0);
     }
 }
 
 PlayerCollider.moveDirection = {
     forward: 0,
     right: 0,
+    up: 0,
 };
-PlayerCollider.moveSpeed = 0.1;
+PlayerCollider.moveSpeed = 0.5;
 
 document.addEventListener("keydown", (event) => {
     if (event.code === "KeyW") PlayerCollider.moveDirection.forward = 1;
