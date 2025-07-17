@@ -62,7 +62,7 @@ scene1.defineScene = function (sceneModelArr, shaderPass, playerPath) {
 
     // BG SPHERE
     this.sphereGeom = new THREE.SphereGeometry(100, 100, 100);
-    this.sphereMat = new THREE.MeshBasicMaterial({ color: 0x222222, side: THREE.DoubleSide, map: videoTexture });
+    this.sphereMat = new THREE.MeshBasicMaterial({ color: 0x888888, side: THREE.DoubleSide, map: videoTexture });
     this.sphereMesh = new THREE.Mesh(this.sphereGeom, this.sphereMat);
     this.scene.add(this.sphereMesh);
 
@@ -103,7 +103,7 @@ scene1.updateScene = function (camera, songProgress) {
     this.frameCount += 1;
     let scale = 0.9 + 0.05 * Math.sin(this.frameCount * 0.01);
     this.playerPath.scale.set(scale, scale, scale);
-    this.playerPath.rotateY(scale * 0.001);
+    this.playerPath.rotateY(scale * 0.01);
 
     let visibleModelIndex = Math.floor(this.frameCount * 0.005) % this.stageModelNum;
 
@@ -783,11 +783,11 @@ sceneBuilder2.defineScene = function (sceneModelArr) {
 };
 
 SceneBuilder.sceneBuilderArr = [
-    scene5,
+    scene1,
     scene2,
     scene3,
     scene4,
-    sceneBuilder4,
+    scene5,
     sceneBuilder4,
     sceneBuilder4,
     sceneBuilder4,

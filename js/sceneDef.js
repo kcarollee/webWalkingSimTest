@@ -5,7 +5,7 @@ const sceneDef = [
         pathColliderURL: "./assets/chapter_1/player path collider/stage_3_path_collider.gltf",
         pathModelURL: "./assets/chapter_1/player path/stage_3_path.gltf",
         modelURLArr: [],
-        trackURL: "./assets/audio/sample.mp3",
+        trackURL: "./assets/audio/greenray.wav",
         initPos: [1.66, 3.5, 1.65],
     },
     {
@@ -14,7 +14,7 @@ const sceneDef = [
         pathColliderURL: "./assets/chapter_1/player path collider/stage_3_path_collider.gltf",
         pathModelURL: "./assets/chapter_1/player path/stage_3_path.gltf",
         modelURLArr: [],
-        trackURL: "./assets/audio/sample.mp3",
+        trackURL: "./assets/audio/lemontea.wav",
         initPos: [1.66, 3.5, 1.65],
     },
     {
@@ -23,7 +23,7 @@ const sceneDef = [
         pathColliderURL: "./assets/chapter_1/player path collider/stage_3_path_collider.gltf",
         pathModelURL: "./assets/chapter_1/player path/stage_3_path.gltf",
         modelURLArr: [],
-        trackURL: "./assets/audio/sample.mp3",
+        trackURL: "./assets/audio/variousthings.wav",
         initPos: [1.66, 3.5, 1.65],
     },
     {
@@ -32,7 +32,7 @@ const sceneDef = [
         pathColliderURL: "./assets/chapter_1/player path collider/stage_3_path_collider.gltf",
         pathModelURL: "./assets/chapter_1/player path/stage_3_path.gltf",
         modelURLArr: [],
-        trackURL: "./assets/audio/sample.mp3",
+        trackURL: "./assets/audio/sigyeol.wav",
         initPos: [1.66, 3.5, 1.65],
     },
     {
@@ -41,7 +41,7 @@ const sceneDef = [
         pathColliderURL: "./assets/chapter_1/player path collider/stage_3_path_collider.gltf",
         pathModelURL: "./assets/chapter_1/player path/stage_3_path.gltf",
         modelURLArr: [],
-        trackURL: "./assets/audio/sample.mp3",
+        trackURL: "./assets/audio/tailbone.wav",
         initPos: [1.66, 3.5, 1.65],
     },
 
@@ -55,7 +55,7 @@ const sceneDef = [
             "./assets/chapter_2/shared models/stage_2_statues.gltf",
             "./assets/chapter_2/shared models/stage_2_dome.gltf",
         ],
-        trackURL: "./assets/audio/sample.mp3",
+        trackURL: "./assets/audio/girl.wav",
         initPos: [0, 0.3, 5],
     },
     {
@@ -68,7 +68,7 @@ const sceneDef = [
             "./assets/chapter_2/shared models/stage_2_statues.gltf",
             "./assets/chapter_2/shared models/stage_2_dome.gltf",
         ],
-        trackURL: "./assets/audio/sample.mp3",
+        trackURL: "./assets/audio/mung.wav",
         initPos: [0, 0.3, 5],
     },
     {
@@ -81,7 +81,7 @@ const sceneDef = [
             "./assets/chapter_2/shared models/stage_2_statues.gltf",
             "./assets/chapter_2/shared models/stage_2_dome.gltf",
         ],
-        trackURL: "./assets/audio/sample.mp3",
+        trackURL: "./assets/audio/etan.wav",
         initPos: [0, 0.3, 5],
     },
     {
@@ -94,7 +94,7 @@ const sceneDef = [
             "./assets/chapter_2/shared models/stage_2_statues.gltf",
             "./assets/chapter_2/shared models/stage_2_dome.gltf",
         ],
-        trackURL: "./assets/audio/sample.mp3",
+        trackURL: "./assets/audio/sogak.wav",
         initPos: [0, 0.3, 5],
     },
 
@@ -104,7 +104,7 @@ const sceneDef = [
         pathColliderURL: "",
         pathModelURL: "",
         modelURLArr: ["./assets/chapter_3/stage_1/city_buildings.gltf", "./assets/chapter_3/stage_1/city_roads.gltf"],
-        trackURL: "./assets/audio/sample.mp3",
+        trackURL: "./assets/audio/rushhour.wav",
         initPos: [-0.1098, 5.242271, -1.07224],
     },
     {
@@ -113,7 +113,7 @@ const sceneDef = [
         pathColliderURL: "",
         pathModelURL: "",
         modelURLArr: ["./assets/chapter_3/stage_1/city_buildings.gltf", "./assets/chapter_3/stage_1/city_roads.gltf"],
-        trackURL: "./assets/audio/sample.mp3",
+        trackURL: "./assets/audio/ktm.wav",
         initPos: [0.6, 0.01, -0.1],
     },
     {
@@ -122,7 +122,7 @@ const sceneDef = [
         pathColliderURL: "",
         pathModelURL: "",
         modelURLArr: ["./assets/chapter_3/stage_1/city_buildings.gltf"],
-        trackURL: "./assets/audio/sample.mp3",
+        trackURL: "./assets/audio/kami.wav",
         initPos: [0.6, 0.01, -0.1],
     },
     {
@@ -131,7 +131,7 @@ const sceneDef = [
         pathColliderURL: "",
         pathModelURL: "",
         modelURLArr: ["./assets/chapter_3/stage_1/city_buildings.gltf"],
-        trackURL: "./assets/audio/sample.mp3",
+        trackURL: "./assets/audio/982.wav",
         initPos: [0.6, 0.01, -0.1],
     },
 ];

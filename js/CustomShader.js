@@ -178,7 +178,7 @@ const CustomShader = {
                 // track 1 
                 case 1:
                     outCol += sceneTex;
-                    outCol += 5.0 * bloom();
+                    outCol += 7.0 * bloom();
                     break;
                 // track 2
                 case 2:
