@@ -459,19 +459,19 @@ scene4.updateScene = function () {
 const scene5 = new SceneBuilder();
 scene5.defineScene = function (sceneModelArr, shaderPass, playerPath) {
     // VIDEO TEXTURE (if applicable)
-    const video = document.createElement("video");
-    video.src = "./assets/chapter_1/stage_3/bg.mov";
-    video.loop = true;
-    video.muted = true;
-    video.play();
+    // const video = document.createElement("video");
+    // video.src = "./assets/chapter_1/stage_3/bg.mov";
+    // video.loop = true;
+    // video.muted = true;
+    // video.play();
 
-    const videoTexture = new THREE.VideoTexture(video);
-    videoTexture.colorSpace = THREE.SRGBColorSpace;
-    videoTexture.minFilter = THREE.LinearFilter;
-    videoTexture.magFilter = THREE.LinearFilter;
-    videoTexture.generateMipmaps = false;
+    // const videoTexture = new THREE.VideoTexture(video);
+    // videoTexture.colorSpace = THREE.SRGBColorSpace;
+    // videoTexture.minFilter = THREE.LinearFilter;
+    // videoTexture.magFilter = THREE.LinearFilter;
+    // videoTexture.generateMipmaps = false;
     // BACKGROUND
-    this.scene.background = videoTexture;
+    this.scene.background = new THREE.Color(0x000000);
 
     // LIGHTS
     this.ambientLight = new THREE.AmbientLight(0xffffff);
@@ -501,7 +501,7 @@ scene5.defineScene = function (sceneModelArr, shaderPass, playerPath) {
     playerPath.material.wireframe = false;
     playerPath.material.opacity = 0.5;
 
-    playerPath.scale.set(10, 1, 10);
+    playerPath.scale.set(0.1, 0.1, 0.1);
 
     console.log(playerPath);
 
@@ -518,41 +518,48 @@ scene5.defineScene = function (sceneModelArr, shaderPass, playerPath) {
     this.shaderPass.uniforms.stageNumber.value = 3;
 
     // STAGE-SPECIFIC MODELS IMPORT/SETUP
-    let stageModelNum = 1;
+    let stageModelNum = 2;
     let scene = this.scene;
-    this.modelPath = "./assets/chapter_1/stage_3/";
+    this.modelPath = "./assets/chapter_1/stage_5/";
     this.stageModelArr = [];
     let stageModelArr = this.stageModelArr;
+
+    this.animationMixerArr = [];
+    let animationMixerArr = this.animationMixerArr;
     for (let i = 0; i < stageModelNum; i++) {
         // TEXTURE IMPORT / SETUP
         //const texture = this.textureLoader.load(this.modelPath + "tex" + (i + 1) + ".png");
         //let objMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff, wireframe: false, map: texture });
-
         let objMaterial = metallicMat;
-        let objMaterial2 = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
-        let modelName = "mesh" + (i + 1) + ".fbx";
+
+        let modelName = "mesh" + (i + 1) + ".gltf";
         let url = this.modelPath + modelName;
 
-        this.fbxLoader.load(url, function (object) {
-            object.traverse(function (child) {
+        // FOR ANIMATED MODELS, EXPORT FROM HOUDINI AS GLTF, BUT THERE SHOULD BE NO CHANGE TO THE NUMBER OF
+        // VERTICES
+        this.gltfLoader.load(url, function (gltf) {
+            gltf.scene.traverse(function (child) {
                 if (child.isMesh) {
                     child.material = objMaterial;
                 }
             });
-            object.scale.set(1, 1, 1);
-            scene.add(object);
-            stageModelArr.push(object);
-        });
+            // console.log("ANIMATION LANGTH : ", object.animations.length);
+            // const mixer = new THREE.AnimationMixer(object);
+            // const action = mixer.clipAction(object.animations[0]);
+            // action.play();
 
-        this.fbxLoader.load(url, function (object) {
-            object.traverse(function (child) {
-                if (child.isMesh) {
-                    child.material = objMaterial2;
-                }
-            });
-            object.scale.set(1, 1, 1);
-            scene.add(object);
-            stageModelArr.push(object);
+            //object.scale.set(1, 1, 1);
+            if (i == 1) {
+                gltf.scene.rotateX(Math.PI * 0.5);
+                gltf.scene.translateY(-50);
+            }
+            scene.add(gltf.scene);
+            stageModelArr.push(gltf.scene);
+
+            const mixer = new THREE.AnimationMixer(gltf.scene);
+            const action = mixer.clipAction(gltf.animations[0]);
+            animationMixerArr.push(mixer);
+            action.play();
         });
     }
 };
@@ -563,7 +570,11 @@ scene5.updateScene = function () {
 
     this.playerPath.rotateY(0.001);
     this.pathClone.rotateY(0.001);
-    if (this.stageModelArr.length > 0) this.stageModelArr[0].rotateY(-0.001);
+
+    this.animationMixerArr.forEach((mixer, i) => {
+        if (i == 1) mixer.update(0.01);
+        else mixer.update(0.001);
+    });
 };
 
 const sceneBuilder1 = new SceneBuilder();
