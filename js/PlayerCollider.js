@@ -95,6 +95,10 @@ export default class PlayerCollider {
         this.playerPhysicsBody.position.set(posX, posY, posZ);
     }
 
+    getPosition() {
+        return this.playerPhysicsBody.position;
+    }
+
     reset() {
         PlayerCollider.moveDirection.forward = 0;
         PlayerCollider.moveDirection.right = 0;

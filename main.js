@@ -376,10 +376,11 @@ function main() {
         const pathColliderURL = currentSceneDef.pathColliderURL;
         const pathModelURL = currentSceneDef.pathModelURL;
         const modelURLArr = currentSceneDef.modelURLArr;
+        const modelNameArr = currentSceneDef.modelNameArr;
         const trackURL = currentSceneDef.trackURL;
 
         //sceneLoader.loadPathColliderModel(pathColliderURL, gltfLoader);
-        sceneLoader.loadModels(modelURLArr, gltfLoader);
+        sceneLoader.loadModels(modelURLArr, gltfLoader, modelNameArr);
         sceneLoader.loadPathModel(pathModelURL, gltfLoader);
 
         audioLoader.load(trackURL, (buffer) => {
@@ -496,8 +497,10 @@ function main() {
         requestAnimationFrame(render);
     }
 
+    let frameCount = 0;
     function runGameLogic() {
         let deltaTime = clock.getDelta();
+        frameCount += 1;
         updatePhysics(deltaTime);
         checkTrackTime();
         if (resizeRenderToDisplaySize(renderer)) {
@@ -553,6 +556,7 @@ function main() {
 
                 shaderPass.uniforms.resolution.value = new THREE.Vector2(window.innerWidth, window.innerHeight);
                 shaderPass.uniforms.time.value = deltaTime * 10.0;
+                shaderPass.uniforms.frameCount.value = frameCount;
             } else {
                 renderer.render(sceneLoader.getScene(), camera);
             }

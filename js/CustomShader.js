@@ -6,6 +6,7 @@ const CustomShader = {
         resolution: { type: "v", value: { x: 0, y: 0 } },
         pixelSize: { type: "f", value: 1 },
         time: { type: "f", value: 0 },
+        frameCount: { type: "f", value: 0 },
         transition: { type: "f", value: 0 },
         stageNumber: { type: "i", value: 1 },
     },
@@ -37,6 +38,7 @@ const CustomShader = {
         uniform vec2 resolution;
         uniform float pixelSize;
         uniform float time;
+        uniform float frameCount;
         uniform float transition;
 
         uniform int stageNumber;
@@ -143,6 +145,41 @@ const CustomShader = {
             return outCol;
         }
 
+        vec3 dither2(vec2 uv){
+            vec2 pixel = uv * resolution;
+            float newPixelSize = pixelSize + transition;
+            newPixelSize *= 2.0;
+            vec2 coord = pixel  / newPixelSize;
+            vec2 subcoord = coord * vec2(3.0, 1.0);
+            vec2 cellOffset = vec2(0, mod(floor(coord.x), 3.0) * 0.5);
+            float ind = mod(floor(subcoord.x), 3.0);
+            vec3 maskColor = vec3(ind == 0.0, ind == 1.0, ind == 2.0);
+
+            vec2 cellUv = fract(subcoord + cellOffset) * 2.0 - 1.0;
+            vec2 border = 1.0 - cellUv * cellUv * MASK_BORDER;
+            maskColor.rgb *= border.x * border.y;
+
+            vec2 rgbCellUV = floor(coord + cellOffset) * newPixelSize / resolution ;
+           
+            vec4 textureIn = texture2D(tDiffuse, rgbCellUV);
+            vec4 textureInOrig = texture2D(tDiffuse, uv);
+            vec3 outCol = vec3(.0);
+            vec2 fc = gl_FragCoord.xy * 1.0;
+            float q1 = getQuantizedRed(textureIn, fc, 0, 0);
+            vec3 qVec = getQuantizedVec(textureIn, fc, 0, 0);
+            outCol = qVec;
+            outCol *= vec3(1.0 - transition / 200.0);
+
+            outCol.rgb *= 1.0 + (maskColor);
+            outCol *= maskColor;
+            
+            float lines = sin(uv.y * 2150.0 + frameCount );
+            outCol *= lines + 2.0;
+            outCol += textureIn.rgb * 2.0;
+
+            return outCol;
+        }
+
         vec2 pc(vec2 d){
             vec2 uv = (gl_FragCoord.xy - d) / resolution.xy;
             //uv.y = 1.0 - uv.y;   
@@ -173,6 +210,8 @@ const CustomShader = {
             vec2 uv = vUv.xy;
             vec3 outCol = vec3(.0);
             vec3 sceneTex = texture2D(tDiffuse, uv).rgb;
+            vec2 newUV = vec2(.0);
+            vec3 newSceneTex = vec3(.0);
 
             switch(stageNumber){
                 // track 1 
@@ -188,9 +227,9 @@ const CustomShader = {
                     outCol += dither(uv);
                     break;
                 case 4:
-                    vec2 newUV = vUv.xy;
+                    newUV = vUv.xy;
                     newUV.x += noise(newUV * 100.0) * 0.01;
-                    vec3 newSceneTex = texture2D(tDiffuse, newUV).rgb;
+                    newSceneTex = texture2D(tDiffuse, newUV).rgb;
 
                     outCol.r += newSceneTex.r;
 
@@ -205,6 +244,25 @@ const CustomShader = {
                     newSceneTex = texture2D(tDiffuse, newUV).rgb;
 
                     outCol.b += newSceneTex.b;
+                    break;
+                case 5:
+                    break;
+                case 6:
+                    outCol += dither(uv);
+                    break;
+                case 7:
+                    if (sin(frameCount * 0.01 + length(uv - vec2(0.5)) * 25.0) < 0.25) outCol += bloom() * 5.0;
+                    else outCol += dither(uv);
+               
+                    break;
+                case 8:
+                    outCol += dither(uv);
+                    
+                    break;
+                case 9:
+                    newUV = vUv.xy;
+                    newUV.x += noise(newUV.x * 50.0 + frameCount) * 0.005;
+                    outCol += dither2(newUV);
                     break;
                 default:
                     outCol = sceneTex;

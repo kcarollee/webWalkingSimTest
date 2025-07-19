@@ -70,7 +70,7 @@ export default class SceneLoader {
         this.sceneBuilder.updateScene(camera, songProgress);
     }
 
-    loadModels(modelURLArr, gltfLoader) {
+    loadModels(modelURLArr, gltfLoader, modelNameArr) {
         if (gltfLoader === undefined) {
             throw new Error("gltfLoader is not defined.");
         }
@@ -78,7 +78,9 @@ export default class SceneLoader {
         const defaultMaterial = this.modelDefaultMaterial;
         const sceneModelArrRef = this.sceneModelArr;
         modelURLArr.forEach((modelURL, i) => {
+            const modelName = modelNameArr[i];
             gltfLoader.load(modelURL, function (gltf) {
+                gltf.scene.name = modelName;
                 sceneRef.add(gltf.scene);
 
                 sceneModelArrRef.push(gltf.scene);
