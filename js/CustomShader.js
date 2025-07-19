@@ -9,6 +9,7 @@ const CustomShader = {
         frameCount: { type: "f", value: 0 },
         transition: { type: "f", value: 0 },
         stageNumber: { type: "i", value: 1 },
+        trigger1: { type: "f", value: 0 },
     },
 
     // 0.2126 R + 0.7152 G + 0.0722 B
@@ -263,6 +264,9 @@ const CustomShader = {
                     newUV = vUv.xy;
                     newUV.x += noise(newUV.x * 50.0 + frameCount) * 0.005;
                     outCol += dither2(newUV);
+                    break;
+                case 10:
+                    outCol += dither(uv);
                     break;
                 default:
                     outCol = sceneTex;

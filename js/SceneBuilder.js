@@ -3,6 +3,7 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
 import { FBXLoader } from "three/addons/loaders/FBXLoader.js";
 import { Reflector } from "three/addons/objects/Reflector.js";
+
 export default class SceneBuilder {
     constructor() {
         this.scene = null;
@@ -16,6 +17,41 @@ export default class SceneBuilder {
 
     setScene(scene) {
         this.scene = scene;
+    }
+
+    setPlayerCollider(playerCollider) {
+        this.playerCollider = playerCollider;
+    }
+
+    // for scene13
+    createTextOverlay(text) {
+        // Check if one already exists
+        if (document.getElementById("textOverlay")) return;
+
+        const overlay = document.createElement("div");
+        overlay.id = "textOverlay";
+        overlay.innerText = text;
+
+        this.overlay = overlay;
+        // Style it
+        Object.assign(overlay.style, {
+            position: "fixed",
+            top: "20px",
+            left: "20px",
+
+            justifyContent: "center",
+            alignItems: "center",
+            color: "red",
+            fontSize: "5rem",
+            fontFamily: "ChosunSM",
+            fontWeight: "700",
+            backgroundColor: "rgba(0, 0, 0, 0)",
+            zIndex: "9999",
+            pointerEvents: "none",
+            transform: "scaleY(1.5)",
+        });
+
+        document.body.appendChild(overlay);
     }
 
     // lights, background color, etc
@@ -1396,8 +1432,10 @@ scene9.updateScene = function (camera, songProgress) {
     });
 };
 
-const sceneBuilder1 = new SceneBuilder();
-sceneBuilder1.defineScene = function (sceneModelArr) {
+const scene10 = new SceneBuilder();
+scene10.defineScene = function (sceneModelArr, shaderPass, playerPath) {
+    shaderPass.uniforms.stageNumber.value = 10;
+
     this.scene.background = new THREE.Color(0xaa0000);
     this.ambientLight = new THREE.AmbientLight(0xffffff);
     this.scene.add(this.ambientLight);
@@ -1436,7 +1474,7 @@ sceneBuilder1.defineScene = function (sceneModelArr) {
     envMap.mapping = THREE.CubeRefractionMapping;
     this.scene.environment = envMap;
 
-    const roadTexture = this.textureLoader.load("./assets/chapter_1/stage_1/roadNormal.png");
+    const roadTexture = this.textureLoader.load("./assets/chapter_3/stage_1/roadNormal.png");
     roadModel.material = new THREE.MeshStandardMaterial({
         envMap: envMap,
         normalMap: roadTexture,
@@ -1453,14 +1491,14 @@ sceneBuilder1.defineScene = function (sceneModelArr) {
     let carMat = new THREE.MeshBasicMaterial({
         color: 0xffffff,
         side: THREE.DoubleSide,
-        map: this.textureLoader.load("./assets/chapter_1/stage_1/textures/carMaterial_diffuse.png"),
+        map: this.textureLoader.load("./assets/chapter_3/stage_1/textures/carMaterial_diffuse.png"),
     });
 
     this.carMeshArr = [];
     this.carMeshGroup = new THREE.Group();
     let carMeshArr = this.carMeshArr;
     let carMeshGroup = this.carMeshGroup;
-    loader.load("./assets/chapter_1/stage_1/scene.gltf", function (gltf) {
+    loader.load("./assets/chapter_3/stage_1/scene.gltf", function (gltf) {
         gltf.scene.material = carMat;
         gltf.scene.scale.set(2, 2, 2);
 
@@ -1493,86 +1531,16 @@ sceneBuilder1.defineScene = function (sceneModelArr) {
 
     this.scene.add(bgSphereMesh);
 };
-sceneBuilder1.updateScene = function (camera) {
+scene10.updateScene = function (camera) {
     this.pointLight.position.copy(camera.position);
     this.carMeshGroup.rotateX(0.01);
     this.frameCount++;
 };
 
-const sceneBuilder4 = new SceneBuilder();
-sceneBuilder4.defineScene = function (sceneModelArr) {
-    this.scene.background = new THREE.Color(0x0000000);
-    this.ambientLight = new THREE.AmbientLight(0xffffff);
-    this.scene.add(this.ambientLight);
-
-    this.pointLight = new THREE.PointLight();
-    this.scene.add(this.pointLight);
-};
-sceneBuilder4.updateScene = function () {};
-
-const sceneBuilder3 = new SceneBuilder();
-sceneBuilder3.defineScene = function () {
-    this.scene.background = new THREE.Color(0x000000);
-    this.ambientLight = new THREE.AmbientLight(0xffffff);
-    this.pointLight = new THREE.PointLight(0xffffff);
-    this.pointLight.position.set(0, 4, 0);
-
-    this.pointLight2 = new THREE.PointLight(0xffffff);
-    this.pointLight2.position.set(3, 4, 3);
-
-    this.pointLight3 = new THREE.PointLight(0xffffff);
-    this.pointLight3.position.set(3, 4, -3);
-
-    this.pointLight4 = new THREE.PointLight(0xffffff);
-    this.pointLight4.position.set(-3, 4, 3);
-
-    this.pointLight.power = 20;
-    this.pointLight2.power = 20;
-    this.pointLight3.power = 20;
-    this.pointLight4.power = 20;
-    this.scene.add(this.ambientLight);
-    this.scene.add(this.pointLight);
-    this.scene.add(this.pointLight2);
-    this.scene.add(this.pointLight3);
-    this.scene.add(this.pointLight4);
-
-    this.pointLight = new THREE.PointLight();
-    this.scene.add(this.pointLight);
-};
-
-sceneBuilder3.updateScene = function () {
-    this.pointLight.position.y = 5 + Math.sin(this.frameCount * 0.05);
-    this.pointLight.position.x = Math.sin(this.frameCount * 0.05);
-    this.pointLight.position.z = Math.cos(this.frameCount * 0.05);
-    this.frameCount += 1;
-};
-
-const sceneBuilder2 = new SceneBuilder();
-sceneBuilder2.defineScene = function (sceneModelArr) {
-    this.scene.background = new THREE.Color(0x0000ff);
-
-    this.pointLight = new THREE.PointLight(0xffffff);
-    this.pointLight.position.set(0, 2, 5);
-    this.pointLight.power = 100;
-
-    this.scene.add(this.pointLight);
-
-    // video texture test
-    const video = document.createElement("video");
-    video.src = "./assets/video/demo.mov";
-    video.loop = true;
-    video.muted = true;
-    video.play();
-
-    const videoTexture = new THREE.VideoTexture(video);
-    videoTexture.colorSpace = THREE.SRGBColorSpace;
-    videoTexture.minFilter = THREE.LinearFilter;
-    videoTexture.magFilter = THREE.LinearFilter;
-    videoTexture.generateMipmaps = false;
-
-    // hdri texture test
-    const textureLoader = new THREE.CubeTextureLoader();
-    const envMap = textureLoader.load([
+const scene13 = new SceneBuilder();
+scene13.defineScene = function (sceneModelArr, shaderPass, playerPath) {
+    const cubeTextureLoader = new THREE.CubeTextureLoader();
+    const envMap = cubeTextureLoader.load([
         "./assets/cubeMaps/cubeMap1/nx.png",
         "./assets/cubeMaps/cubeMap1/ny.png",
         "./assets/cubeMaps/cubeMap1/nz.png",
@@ -1582,34 +1550,180 @@ sceneBuilder2.defineScene = function (sceneModelArr) {
     ]);
     envMap.mapping = THREE.CubeRefractionMapping;
     this.scene.environment = envMap;
-    sceneModelArr.forEach((obj, i) => {
-        let newMaterial;
-        switch (i) {
-            case 0:
-                newMaterial = new THREE.MeshStandardMaterial({
-                    side: THREE.DoubleSide,
-                    roughness: 0.0,
-                    metalness: 0.1,
-                    envMap: envMap,
-                });
-                break;
-            case 1:
-                newMaterial = new THREE.MeshStandardMaterial({
-                    side: THREE.DoubleSide,
-                    roughness: 0.0,
-                    metalness: 0.1,
-                    envMap: envMap,
-                });
-                break;
-            case 2:
-                newMaterial = new THREE.MeshBasicMaterial({ map: videoTexture, side: THREE.DoubleSide });
-                break;
-        }
-        obj.traverse((child) => {
-            child.material = newMaterial;
-            child.material.needsUpdate = true;
-        });
+    const metallicMat = new THREE.MeshStandardMaterial({
+        envMap: envMap,
+        side: THREE.DoubleSide,
+        roughness: 0.1,
+        metalness: 1.0,
     });
+
+    const creditTexture = this.textureLoader.load("./assets/chapter_3/stage_4/credits.png");
+
+    shaderPass.uniforms.stageNumber.value = 10;
+
+    this.scene.background = new THREE.Color(0xffffff);
+    this.ambientLight = new THREE.AmbientLight(0xffffff);
+    this.scene.add(this.ambientLight);
+
+    this.pointLight = new THREE.PointLight();
+    this.scene.add(this.pointLight);
+
+    const buildingModel = sceneModelArr.find((group) => group.name === "BUILDINGS");
+    const roadModel = sceneModelArr.find((group) => group.name === "ROADS");
+    this.buildingModelClone = buildingModel.clone();
+    this.roadModelClone = roadModel.clone();
+    buildingModel.traverse((child) => {
+        if (child.isMesh) {
+            child.material = new THREE.MeshBasicMaterial({ color: 0x000000, wireframe: true });
+        }
+    });
+
+    roadModel.traverse((child) => {
+        if (child.isMesh) {
+            child.material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
+        }
+    });
+
+    //this.buildingModelClone.rotateX(Math.PI);
+    this.buildingModelClone.translateY(10);
+    this.buildingModelClone.scale.y = 4;
+    this.buildingModelClone.rotateX(Math.PI);
+    this.buildingModelClone.material = metallicMat;
+    this.roadModelClone.material = metallicMat;
+    this.scene.add(this.buildingModelClone);
+    this.scene.add(this.roadModelClone);
+
+    const creditPanelGeom = new THREE.CylinderGeometry(1, 1, 0.2, 30, 1, true);
+    const creditPanelMaterial = new THREE.MeshBasicMaterial({ map: creditTexture, side: THREE.DoubleSide });
+    let creditPanelNum = 30;
+    let heightOffset = 2.5;
+    this.creditPanelMeshArr = [];
+    for (let i = 0; i < creditPanelNum; i++) {
+        const creditPanelMesh = new THREE.Mesh(creditPanelGeom, creditPanelMaterial);
+        //creditPanelMesh.rotateX(Math.PI * 0.5);
+        let x = 0;
+        let y = i * 0.25 + heightOffset;
+        let z = 0;
+        creditPanelMesh.position.set(x, y, z);
+        creditPanelMesh.rotateY(i);
+        creditPanelMesh.offset = i;
+        this.scene.add(creditPanelMesh);
+        this.creditPanelMeshArr.push(creditPanelMesh);
+    }
+
+    const roadTexture = this.textureLoader.load("./assets/chapter_3/stage_1/roadNormal.png");
+    roadModel.material = new THREE.MeshStandardMaterial({
+        envMap: envMap,
+        normalMap: roadTexture,
+        map: roadTexture,
+        //normalScale: 2.0,
+        side: THREE.DoubleSide,
+        roughness: 0.0,
+        metalness: 0.65,
+    });
+
+    // VIDEO TEXTURE (if applicable)
+    this.videoTextureArr = [];
+    this.videoTextureNum = 7;
+    for (let i = 0; i < this.videoTextureNum; i++) {
+        let url = "./assets/chapter_3/stage_4/tex" + (i + 1) + ".mov";
+        const spriteVideoTexture = createVideoTexture(url);
+        this.videoTextureArr.push(spriteVideoTexture);
+    }
+
+    // SPRITES
+    this.spriteMaterialArr = [];
+    for (let i = 0; i < this.videoTextureNum; i++) {
+        const spriteMaterial = new THREE.SpriteMaterial({ map: this.videoTextureArr[i] });
+        this.spriteMaterialArr.push(spriteMaterial);
+    }
+    this.spriteNum = 300;
+    this.spriteArr = [];
+    let randomRange = 10;
+    for (let i = 0; i < this.spriteNum; i++) {
+        let spriteMaterialIndex = Math.floor(Math.random() * 3);
+        const sprite = new THREE.Sprite(this.spriteMaterialArr[spriteMaterialIndex]);
+        let x = Math.random() * randomRange * 2 - randomRange;
+        let y = Math.random() * randomRange * 2 - randomRange;
+        let z = Math.random() * randomRange * 2 - randomRange;
+        sprite.position.set(x, y, z);
+        sprite.scale.set(0.5, 0.5, 0.5);
+        this.scene.add(sprite);
+        this.spriteArr.push(sprite);
+    }
+
+    this.playerCollider.moveSpeed = 2.0;
+
+    this.createTextOverlay("READY??");
+    this.catchCount = 0;
+};
+scene13.updateScene = function (camera, songProgress) {
+    this.pointLight.position.copy(camera.position);
+
+    this.frameCount++;
+
+    this.creditPanelMeshArr.forEach((panel, i) => {
+        panel.rotateY(0.002);
+        panel.position.y = 5 + 2.5 * Math.sin(this.frameCount * 0.001 + i * 2);
+        panel.scale.x = 1.5 + Math.sin(this.frameCount * 0.001 + i);
+        panel.scale.z = 1.5 + Math.sin(this.frameCount * 0.001 + i);
+    });
+
+    const currentPos = new THREE.Vector3();
+    currentPos.copy(camera.position);
+    let randomRange = 10;
+    //console.log(camera.position, this.spriteArr[0].position);
+    this.spriteArr.forEach((sprite, i) => {
+        if (currentPos.distanceTo(sprite.position) < 1) {
+            let x = Math.random() * randomRange * 2 - randomRange;
+            let y = Math.random() * randomRange * 2 - randomRange;
+            let z = Math.random() * randomRange * 2 - randomRange;
+            console.log("WHY ARE YOU READING THIS?? GET OUT");
+            sprite.position.set(x, y, z);
+
+            this.catchCount += 1;
+            if (this.catchCount < 100) {
+                this.overlay.innerHTML = "WHO IS THIS MAN?? " + this.catchCount;
+            } else if (this.catchCount < 200) {
+                this.overlay.innerHTML = "GUESS YOU'LL NEVER KNOW!! " + this.catchCount;
+            } else if (this.catchCount < 500) {
+                this.overlay.innerHTML = "CATCH THEM ALL AHHH!! " + this.catchCount;
+            } else if (this.catchCount < 1000) {
+                this.overlay.innerHTML = "982982982982982 " + this.catchCount;
+            } else if (this.catchCount < 2000) {
+                this.overlay.innerHTML = "YOU CAN'T CATCH THEM ALL SORRY " + this.catchCount;
+            }
+        } else {
+            let noiseAmplitude = 10.0;
+            const noise = new THREE.Vector3(
+                Math.sin(this.frameCount * 0.1 * 0.5 + i * 100) * noiseAmplitude,
+                Math.sin(this.frameCount * 0.1 * 0.8 + i * 2.0) * noiseAmplitude,
+                Math.cos(this.frameCount * 0.1 * 0.3 + i * 1.5) * noiseAmplitude
+            );
+
+            // Make a separate target position without mutating currentPos
+            const noisyTarget = currentPos.clone().add(noise);
+            sprite.position.lerp(noisyTarget, 0.001);
+        }
+    });
+
+    if (this.catchCount > 500) {
+        this.spriteMaterialArr[0].map = this.videoTextureArr[3];
+        this.spriteMaterialArr[1].map = this.videoTextureArr[4];
+        this.spriteMaterialArr[2].map = this.videoTextureArr[5];
+    }
+
+    if (this.catchCount > 100) {
+        this.buildingModelClone.rotateY(0.01);
+    }
+
+    if (this.catchCount > 200) {
+        this.roadModelClone.scale.set(1, 5 * Math.sin(this.frameCount * 0.05), 1);
+    }
+
+    if (this.catchCount > 1000) {
+        this.scene.background = this.videoTextureArr[6];
+    }
 };
 
 SceneBuilder.sceneBuilderArr = [
@@ -1625,8 +1739,8 @@ SceneBuilder.sceneBuilderArr = [
     scene8,
     scene9,
     // chapter 3
-    sceneBuilder1,
-    sceneBuilder2,
-    sceneBuilder3,
-    sceneBuilder4,
+    scene10,
+    scene10,
+    scene10,
+    scene13,
 ];

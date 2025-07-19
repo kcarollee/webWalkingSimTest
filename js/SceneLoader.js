@@ -58,9 +58,12 @@ export default class SceneLoader {
         this.shaderPass = shaderPass;
     }
 
-    buildScene(sceneNumber) {
+    buildScene(sceneNumber, playerCollider) {
         this.sceneBuilder = SceneBuilder.sceneBuilderArr[sceneNumber];
         this.sceneBuilder.setScene(this.scene);
+        this.playerCollider = playerCollider;
+        //console.log("SETTING PLAYER COLLIDER TO SCENE", this.playerCollider);
+        this.sceneBuilder.setPlayerCollider(this.playerCollider);
         console.log(this.sceneBuilder);
         this.sceneBuilder.defineScene(this.sceneModelArr, this.shaderPass, this.playerPath);
     }
@@ -164,7 +167,6 @@ export default class SceneLoader {
     }
 
     connectPlayerCollider(playerCollider) {
-        console.log("connect player");
         this.physicsWorld.addBody(playerCollider.getPlayerPhysicsBody());
         this.playerCollider = playerCollider;
     }
@@ -192,6 +194,9 @@ export default class SceneLoader {
     clearScene() {
         this.scene.clear();
         this.sceneModelArr = [];
+
+        const overlay = document.getElementById("textOverlay");
+        if (overlay) overlay.remove();
     }
 
     clearModelsOnly() {

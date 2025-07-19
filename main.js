@@ -105,7 +105,7 @@ function main() {
         const initPos = currentSceneDef.initPos;
         playerCollider.reset();
         playerCollider.setPosition(initPos[0], initPos[1], initPos[2]);
-        sceneLoader.buildScene(currentTrackNumber);
+        sceneLoader.buildScene(currentTrackNumber, playerCollider);
         // the time out is a must to ensure that all physics bodies are created for collision
         setTimeout(() => {
             sceneLoader.connectPlayerCollider(playerCollider);
@@ -130,7 +130,7 @@ function main() {
     let introSceneMode = true;
     const introCamera = new THREE.PerspectiveCamera();
     const raycaster = new THREE.Raycaster();
-    introCamera.position.set(0, -0.1, 0);
+    introCamera.position.set(0, 0, 0);
     gsap.to(introCamera.position, {
         duration: 3,
         z: 1.5,
@@ -386,7 +386,7 @@ function main() {
         audioLoader.load(trackURL, (buffer) => {
             sound.setBuffer(buffer);
             sound.setLoop(false);
-            sound.setVolume(0.1);
+            sound.setVolume(1);
             sound.play();
         });
     }
@@ -459,14 +459,15 @@ function main() {
 
     playerControls.addEventListener("unlock", () => {
         pause = true;
-        sound.pause();
+        //sound.pause();
         resetTrackListStrings();
         overlay.style.display = "flex";
     });
 
     function updatePhysics(deltaTime) {
         sceneLoader.updatePhysics(deltaTime);
-        sceneLoader.updateScene(camera, songProgress);
+
+        sceneLoader.updateScene(camera, songProgress, playerCollider);
 
         if (!pause) {
             playerCollider.movePlayer(camera);

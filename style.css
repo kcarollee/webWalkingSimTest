@@ -76,14 +76,15 @@ canvas { display: block; }
 
 .number-link{
    font-family: "ChosunSM";
-   font-size: 25px;
+   font-size: 30px;
 
    cursor: pointer;
    position: relative;
    padding: 5px 10px;
    text-align: center;
-
-   top: 35vh;
+   background-color: rgba(255, 0, 0, 0.8);
+   transform: scaleY(2);
+   /* top: 35vh; */
 }
 
 /* Dropdown menu (initially hidden) */
@@ -92,7 +93,8 @@ canvas { display: block; }
    top: 100%;
    left: 50%;
    transform: translateX(-50%); /* Centering the dropdown */
-   background: transparent;
+   /* background: transparent; */
+   background-color: black;
    display: none;
    flex-direction: column;
    padding: 5px 5px;

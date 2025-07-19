@@ -8,7 +8,7 @@ export default class PlayerCollider {
             forward: 0,
             right: 0,
         };
-        this.moveSpeed = 0.1;
+        this.moveSpeed = 0.5;
 
         this.playerPhysicsBody = null;
         this.playerPhysicsMaterial = null;
@@ -67,20 +67,14 @@ export default class PlayerCollider {
 
         let velocity = new CANNON.Vec3(0, 0, 0);
         if (PlayerCollider.moveDirection.forward !== 0) {
-            velocity.vadd(
-                forward.multiplyScalar(PlayerCollider.moveDirection.forward * PlayerCollider.moveSpeed),
-                velocity
-            );
+            velocity.vadd(forward.multiplyScalar(PlayerCollider.moveDirection.forward * this.moveSpeed), velocity);
         }
         if (PlayerCollider.moveDirection.right !== 0) {
-            velocity.vadd(
-                right.multiplyScalar(PlayerCollider.moveDirection.right * PlayerCollider.moveSpeed),
-                velocity
-            );
+            velocity.vadd(right.multiplyScalar(PlayerCollider.moveDirection.right * this.moveSpeed), velocity);
         }
 
         if (PlayerCollider.moveDirection.up !== 0) {
-            velocity.vadd(right.multiplyScalar(PlayerCollider.moveDirection.up * PlayerCollider.moveSpeed), velocity);
+            velocity.vadd(right.multiplyScalar(PlayerCollider.moveDirection.up * this.moveSpeed), velocity);
         }
 
         this.playerPhysicsBody.velocity.set(velocity.x, velocity.y, velocity.z);
@@ -116,7 +110,7 @@ PlayerCollider.moveDirection = {
     right: 0,
     up: 0,
 };
-PlayerCollider.moveSpeed = 0.5;
+// PlayerCollider.moveSpeed = 0.5;
 
 document.addEventListener("keydown", (event) => {
     if (event.code === "KeyW") PlayerCollider.moveDirection.forward = 1;
