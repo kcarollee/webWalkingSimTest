@@ -144,7 +144,7 @@ const sceneDef = [
         pathModelURL: "./assets/chapter_1/player path/stage_3_path.gltf",
         modelURLArr: [],
         modelNameArr: [],
-        trackURL: "./assets/audio/greenray.wav",
+        trackURL: "./assets/audio/greenray.mp3",
         initPos: [1.66, 3.5, 1.65],
     },
     {
@@ -154,7 +154,7 @@ const sceneDef = [
         pathModelURL: "./assets/chapter_1/player path/stage_3_path.gltf",
         modelURLArr: [],
         modelNameArr: [],
-        trackURL: "./assets/audio/lemontea.wav",
+        trackURL: "./assets/audio/lemontea.mp3",
         initPos: [1.66, 3.5, 1.65],
     },
     {
@@ -164,7 +164,7 @@ const sceneDef = [
         pathModelURL: "./assets/chapter_1/player path/stage_3_path.gltf",
         modelURLArr: [],
         modelNameArr: [],
-        trackURL: "./assets/audio/variousthings.wav",
+        trackURL: "./assets/audio/variousthings.mp3",
         initPos: [1.66, 3.5, 1.65],
     },
     {
@@ -174,7 +174,7 @@ const sceneDef = [
         pathModelURL: "./assets/chapter_1/player path/stage_3_path.gltf",
         modelURLArr: [],
         modelNameArr: [],
-        trackURL: "./assets/audio/sigyeol.wav",
+        trackURL: "./assets/audio/sigyeol.mp3",
         initPos: [1.66, 3.5, 1.65],
     },
     {
@@ -184,7 +184,7 @@ const sceneDef = [
         pathModelURL: "./assets/chapter_1/player path/stage_3_path.gltf",
         modelURLArr: [],
         modelNameArr: [],
-        trackURL: "./assets/audio/tailbone.wav",
+        trackURL: "./assets/audio/tailbone.mp3",
         initPos: [1.66, 3.5, 1.65],
     },
 
@@ -199,7 +199,7 @@ const sceneDef = [
             "./assets/chapter_2/shared models/stage_2_dome.gltf",
         ],
         modelNameArr: ["COLUMNS", "STATUES", "DOME"],
-        trackURL: "./assets/audio/girl.wav",
+        trackURL: "./assets/audio/girl.mp3",
         initPos: [0, 0.3, 5],
     },
     {
@@ -213,7 +213,7 @@ const sceneDef = [
             "./assets/chapter_2/shared models/stage_2_dome.gltf",
         ],
         modelNameArr: ["COLUMNS", "STATUES", "DOME"],
-        trackURL: "./assets/audio/mung.wav",
+        trackURL: "./assets/audio/mung.mp3",
         initPos: [0, 0.3, 5],
     },
     {
@@ -227,7 +227,7 @@ const sceneDef = [
             "./assets/chapter_2/shared models/stage_2_dome.gltf",
         ],
         modelNameArr: ["COLUMNS", "STATUES", "DOME"],
-        trackURL: "./assets/audio/etan.wav",
+        trackURL: "./assets/audio/etan.mp3",
         initPos: [0, 0.3, 5],
     },
     {
@@ -241,7 +241,7 @@ const sceneDef = [
             "./assets/chapter_2/shared models/stage_2_dome.gltf",
         ],
         modelNameArr: ["COLUMNS", "STATUES", "DOME"],
-        trackURL: "./assets/audio/sogak.wav",
+        trackURL: "./assets/audio/sogak.mp3",
         initPos: [0, 0.3, 5],
     },
 
@@ -255,7 +255,7 @@ const sceneDef = [
             "./assets/chapter_3/shared models/city_roads.gltf",
         ],
         modelNameArr: ["BUILDINGS", "ROADS"],
-        trackURL: "./assets/audio/rushhour.wav",
+        trackURL: "./assets/audio/rushhour.mp3",
         initPos: [-0.1098, 5.242271, -1.07224],
     },
     {
@@ -268,7 +268,7 @@ const sceneDef = [
             "./assets/chapter_3/shared models/city_roads.gltf",
         ],
         modelNameArr: ["BUILDINGS", "ROADS"],
-        trackURL: "./assets/audio/ktm.wav",
+        trackURL: "./assets/audio/ktm.mp3",
         initPos: [0.6, 0.01, -0.1],
     },
     {
@@ -281,7 +281,7 @@ const sceneDef = [
             "./assets/chapter_3/shared models/city_roads.gltf",
         ],
         modelNameArr: ["BUILDINGS", "ROADS"],
-        trackURL: "./assets/audio/kami.wav",
+        trackURL: "./assets/audio/kami.mp3",
         initPos: [0.6, 0.01, -0.1],
     },
     {
@@ -294,7 +294,7 @@ const sceneDef = [
             "./assets/chapter_3/shared models/city_roads.gltf",
         ],
         modelNameArr: ["BUILDINGS", "ROADS"],
-        trackURL: "./assets/audio/982.wav",
+        trackURL: "./assets/audio/982.mp3",
         initPos: [0.6, 0.01, -0.1],
     },
 ];

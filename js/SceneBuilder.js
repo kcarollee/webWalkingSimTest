@@ -1537,6 +1537,180 @@ scene10.updateScene = function (camera) {
     this.frameCount++;
 };
 
+const scene11 = new SceneBuilder();
+scene11.defineScene = function (sceneModelArr, shaderPass, playerPath) {
+    const cubeTextureLoader = new THREE.CubeTextureLoader();
+    const envMap = cubeTextureLoader.load([
+        "./assets/cubeMaps/cubeMap1/nx.png",
+        "./assets/cubeMaps/cubeMap1/ny.png",
+        "./assets/cubeMaps/cubeMap1/nz.png",
+        "./assets/cubeMaps/cubeMap1/px.png",
+        "./assets/cubeMaps/cubeMap1/py.png",
+        "./assets/cubeMaps/cubeMap1/pz.png",
+    ]);
+    envMap.mapping = THREE.CubeRefractionMapping;
+    this.scene.environment = envMap;
+    const metallicMat = new THREE.MeshStandardMaterial({
+        envMap: envMap,
+        side: THREE.DoubleSide,
+        roughness: 0.1,
+        metalness: 1.0,
+    });
+
+    shaderPass.uniforms.stageNumber.value = 10;
+
+    this.scene.background = new THREE.Color(0x000000);
+    this.ambientLight = new THREE.AmbientLight(0xffffff);
+    this.scene.add(this.ambientLight);
+
+    this.pointLight = new THREE.PointLight();
+    this.scene.add(this.pointLight);
+
+    const buildingModel = sceneModelArr.find((group) => group.name === "BUILDINGS");
+    const roadModel = sceneModelArr.find((group) => group.name === "ROADS");
+    this.buildingModelClone = buildingModel.clone();
+    this.roadModelClone = roadModel.clone();
+    buildingModel.traverse((child) => {
+        if (child.isMesh) {
+            child.material = new THREE.MeshPhongMaterial({ color: 0xffffff, wireframe: true });
+        }
+    });
+
+    roadModel.traverse((child) => {
+        if (child.isMesh) {
+            child.material = new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true });
+        }
+    });
+
+    const roadTexture = this.textureLoader.load("./assets/chapter_3/stage_1/roadNormal.png");
+    roadModel.material = new THREE.MeshStandardMaterial({
+        envMap: envMap,
+        normalMap: roadTexture,
+        map: roadTexture,
+        //normalScale: 2.0,
+        side: THREE.DoubleSide,
+        roughness: 0.0,
+        metalness: 0.65,
+    });
+
+    // VIDEO TEXTURE (if applicable)
+    this.videoTextureArr = [];
+    this.videoTextureNum = 0;
+    for (let i = 0; i < this.videoTextureNum; i++) {
+        let url = "./assets/chapter_3/stage_4/tex" + (i + 1) + ".mov";
+        const spriteVideoTexture = createVideoTexture(url);
+        this.videoTextureArr.push(spriteVideoTexture);
+    }
+
+    // STAGE-SPECIFIC MODELS IMPORT/SETUP
+    let stageModelNum = 10;
+    let scene = this.scene;
+    this.modelPath = "./assets/chapter_3/stage_2/";
+    this.stageModelArr = [];
+    let stageModelArr = this.stageModelArr;
+
+    this.animationMixerArr = [];
+    this.actionArr = [];
+    this.modelInitialPosArr = [];
+    this.animationDuration = 0;
+    let animationMixerArr = this.animationMixerArr;
+    let actionArr = this.actionArr;
+    let animationDuration = this.animationDuration;
+    let modelInitialPosArr = this.modelInitialPosArr;
+    for (let i = 0; i < stageModelNum; i++) {
+        // TEXTURE IMPORT / SETUP
+        //const texture = this.textureLoader.load(this.modelPath + "tex" + (i + 1) + ".png");
+        //let objMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff, wireframe: false, map: texture });
+        let objMaterial = new THREE.MeshNormalMaterial();
+
+        let modelName = "mesh" + 1 + ".gltf";
+        let url = this.modelPath + modelName;
+
+        // FOR ANIMATED MODELS, EXPORT FROM HOUDINI AS GLTF, BUT THERE SHOULD BE NO CHANGE TO THE NUMBER OF
+        // VERTICES
+        this.gltfLoader.load(url, function (gltf) {
+            gltf.scene.traverse(function (child) {
+                if (child.isMesh) {
+                    child.material = objMaterial;
+                }
+            });
+            // console.log("ANIMATION LANGTH : ", object.animations.length);
+            // const mixer = new THREE.AnimationMixer(object);
+            // const action = mixer.clipAction(object.animations[0]);
+            // action.play();
+
+            //object.scale.set(1, 1, 1);
+            scene.add(gltf.scene);
+
+            let x = Math.random() * 20 - 10;
+            let y = 0;
+            let z = Math.random() * 20 - 10;
+
+            gltf.scene.scale.set(3, 3, 3);
+            gltf.scene.position.set(x, y, z);
+            gltf.scene.rotateY(Math.random() * Math.PI * 2);
+
+            gltf.scene.rotateDeg = Math.random() * 0.01 - 0.005;
+            gltf.scene.posChangeInterval = Math.floor(Math.random() * 300 + 300);
+
+            modelInitialPosArr.push(new THREE.Vector3(x, y, z));
+            stageModelArr.push(gltf.scene);
+
+            const mixer = new THREE.AnimationMixer(gltf.scene);
+            const animationClip = gltf.animations[0];
+            const action = mixer.clipAction(animationClip);
+            animationDuration = animationClip.duration;
+
+            animationMixerArr.push(mixer);
+            actionArr.push(action);
+            action.play();
+            action.paused = true;
+        });
+    }
+
+    this.playerCollider.moveSpeed = 2.0;
+};
+scene11.updateScene = function (camera, songProgress) {
+    this.pointLight.position.copy(camera.position);
+
+    this.frameCount++;
+
+    const currentPos = new THREE.Vector3();
+    currentPos.copy(camera.position);
+    let actionArr = this.actionArr;
+    let modelInitialPosArr = this.modelInitialPosArr;
+    this.animationMixerArr.forEach((mixer, i) => {
+        mixer.update(0.01);
+
+        const minDist = 1;
+        const maxDist = 6;
+
+        const distance = currentPos.distanceTo(modelInitialPosArr[i]);
+        const t = THREE.MathUtils.clamp((distance - minDist) / (maxDist - minDist), 0, 1);
+
+        actionArr[i].time = t * 2.74;
+        mixer.update(0);
+    });
+
+    let stageModelArr = this.stageModelArr;
+    let frameCount = this.frameCount;
+    this.modelInitialPosArr.forEach((posVec, i) => {
+        if (frameCount % stageModelArr[i].posChangeInterval == 0) {
+            gsap.to(posVec, {
+                duration: 1,
+                x: Math.random() * 20 - 10,
+                z: Math.random() * 20 - 10,
+                ease: "power2.out",
+            });
+        }
+    });
+
+    this.stageModelArr.forEach((model, i) => {
+        model.position.copy(this.modelInitialPosArr[i]);
+        model.rotateY(model.rotateDeg);
+    });
+};
+
 const scene13 = new SceneBuilder();
 scene13.defineScene = function (sceneModelArr, shaderPass, playerPath) {
     const cubeTextureLoader = new THREE.CubeTextureLoader();
@@ -1688,7 +1862,7 @@ scene13.updateScene = function (camera, songProgress) {
                 this.overlay.innerHTML = "GUESS YOU'LL NEVER KNOW!! " + this.catchCount;
             } else if (this.catchCount < 500) {
                 this.overlay.innerHTML = "CATCH THEM ALL AHHH!! " + this.catchCount;
-            } else if (this.catchCount < 1000) {
+            } else if (this.catchCount < 982) {
                 this.overlay.innerHTML = "982982982982982 " + this.catchCount;
             } else if (this.catchCount < 2000) {
                 this.overlay.innerHTML = "YOU CAN'T CATCH THEM ALL SORRY " + this.catchCount;
@@ -1740,7 +1914,7 @@ SceneBuilder.sceneBuilderArr = [
     scene9,
     // chapter 3
     scene10,
-    scene10,
+    scene11,
     scene10,
     scene13,
 ];
