@@ -62,9 +62,9 @@ export default class SceneLoader {
         this.sceneBuilder = SceneBuilder.sceneBuilderArr[sceneNumber];
         this.sceneBuilder.setScene(this.scene);
         this.playerCollider = playerCollider;
-        //console.log("SETTING PLAYER COLLIDER TO SCENE", this.playerCollider);
+        ////console.log("SETTING PLAYER COLLIDER TO SCENE", this.playerCollider);
         this.sceneBuilder.setPlayerCollider(this.playerCollider);
-        console.log(this.sceneBuilder);
+        //console.log(this.sceneBuilder);
         this.sceneBuilder.defineScene(this.sceneModelArr, this.shaderPass, this.playerPath);
     }
 
@@ -91,7 +91,7 @@ export default class SceneLoader {
                     // child.rotation.set(-Math.PI * 0.5, 0, 0);
                     if (child.isMesh) {
                         if (!child.material || child.material === null) {
-                            console.log("Mesh has no material. Assigning a default one.");
+                            //console.log("Mesh has no material. Assigning a default one.");
                             child.material = defaultMaterial;
                         }
                         // child.material = defaultMaterial;
@@ -109,16 +109,16 @@ export default class SceneLoader {
         }
 
         if (pathModelURL === "") {
-            console.log("NOT PATH MODEL FOUND");
+            //console.log("NOT PATH MODEL FOUND");
             return;
         }
 
         gltfLoader.load(pathModelURL, (gltf) => {
             gltf.scene.traverse((child) => {
                 if (child.isMesh) {
-                    //console.log(child);
+                    ////console.log(child);
                     this.playerPath = child;
-                    console.log(this.playerPath);
+                    //console.log(this.playerPath);
                     child.material = this.playerPathMaterial;
                 }
             });
@@ -133,7 +133,7 @@ export default class SceneLoader {
             throw new Error("gltfLoader is not defined.");
         }
         if (pathColliderModelURL === "") {
-            console.log("NO PAH COLLIDER MODEL FOUND");
+            //console.log("NO PAH COLLIDER MODEL FOUND");
             return;
         }
         gltfLoader.load(pathColliderModelURL, (gltf) => {
@@ -145,13 +145,13 @@ export default class SceneLoader {
             // this.playerPathCollider = gltf.scene;
             const playerPathColliderMesh = gltf.scene.children[0];
             this._createPathPhysics(playerPathColliderMesh);
-            console.log("path mesh created");
+            //console.log("path mesh created");
             this.scene.add(gltf.scene);
         });
     }
 
     _createPathPhysics(mesh) {
-        console.log("CREATING NEW PATH PHYSICS");
+        //console.log("CREATING NEW PATH PHYSICS");
         const geometry = mesh.geometry;
         const vertices = geometry.attributes.position.array;
         const indices = geometry.index.array;
@@ -217,13 +217,13 @@ export default class SceneLoader {
             for (let i = 0; i < bodies.length; i++) {
                 this.physicsWorld.removeBody(bodies[i]);
             }
-            console.log("REMOVE PATH PHYSICS BODY");
+            //console.log("REMOVE PATH PHYSICS BODY");
             //this.physicsWorld.removeBody(this.pathPhysicsBody);
         }
-        console.log("REMOVE PLAYER PHYSICS BODY");
+        //console.log("REMOVE PLAYER PHYSICS BODY");
         this.physicsWorld.removeBody(this.playerCollider.getPlayerPhysicsBody());
         this.pathPhysicsBody = undefined;
-        console.log(this.physicsWorld);
-        console.log("PHYSICS BODY CLEARED");
+        //console.log(this.physicsWorld);
+        //console.log("PHYSICS BODY CLEARED");
     }
 }

@@ -61,6 +61,14 @@ export default class SceneBuilder {
     updateScene() {}
 }
 
+// speed value: 0~4
+function setSpeedSliderValue(newVal) {
+    const speedSlider = document.getElementById("speed-slider");
+    const speedValueDisplay = document.getElementById("speed-value");
+    speedValueDisplay.textContent = Math.round((newVal / 10.0) * 100) + "%";
+    speedSlider.value = newVal / 10.0;
+}
+
 // TRACK 1: GREENLIGHT
 const scene1 = new SceneBuilder();
 scene1.defineScene = function (sceneModelArr, shaderPass, playerPath) {
@@ -74,6 +82,7 @@ scene1.defineScene = function (sceneModelArr, shaderPass, playerPath) {
     // PATH MATERIAL OVERRIDE/RESET
     playerPath.material.color = new THREE.Color(0x00ff00);
     playerPath.material.wireframe = true;
+    playerPath.scale.set(0, 0, 0);
 
     // SET REFERENCES
     this.sceneModelArr = sceneModelArr;
@@ -85,7 +94,7 @@ scene1.defineScene = function (sceneModelArr, shaderPass, playerPath) {
 
     // VIDEO TEXTURE (if applicable)
     const video = document.createElement("video");
-    video.src = "./assets/video/demo3.mov";
+    video.src = "./assets/video/demo4.mov";
     video.loop = true;
     video.muted = true;
     video.play();
@@ -100,7 +109,7 @@ scene1.defineScene = function (sceneModelArr, shaderPass, playerPath) {
     this.sphereGeom = new THREE.SphereGeometry(100, 100, 100);
     this.sphereMat = new THREE.MeshBasicMaterial({ color: 0x888888, side: THREE.DoubleSide, map: videoTexture });
     this.sphereMesh = new THREE.Mesh(this.sphereGeom, this.sphereMat);
-    this.scene.add(this.sphereMesh);
+    //this.scene.add(this.sphereMesh);
 
     // STAGE-SPECIFIC MODELS IMPORT/SETUP
     this.stageModelArr = [];
@@ -109,7 +118,7 @@ scene1.defineScene = function (sceneModelArr, shaderPass, playerPath) {
     let stageModelArr = this.stageModelArr;
     this.modelPath = "./assets/chapter_1/stage_1/";
     // TEXTURE IMPORT / SETUP
-    console.log(gsap);
+    //console.log(gsap);
     for (let i = 0; i < this.stageModelNum; i++) {
         let modelName = "polyreduce" + (i + 1) + ".fbx";
         let url = this.modelPath + modelName;
@@ -133,13 +142,16 @@ scene1.defineScene = function (sceneModelArr, shaderPass, playerPath) {
             stageModelArr.push(object);
         });
     }
+
+    this.playerCollider.moveSpeed = 1.0;
+    setSpeedSliderValue(1);
 };
 
 scene1.updateScene = function (camera, songProgress) {
     this.frameCount += 1;
-    let scale = 0.9 + 0.05 * Math.sin(this.frameCount * 0.01);
-    this.playerPath.scale.set(scale, scale, scale);
-    this.playerPath.rotateY(scale * 0.01);
+    let scale = 11 + Math.sin(this.frameCount * 0.01);
+    this.playerPath.scale.set(10, 10, 10);
+    this.playerPath.rotateY(0.01);
 
     let visibleModelIndex = Math.floor(this.frameCount * 0.005) % this.stageModelNum;
 
@@ -322,7 +334,7 @@ scene2.defineScene = function (sceneModelArr, shaderPass, playerPath) {
                     child.material = objMaterial;
                 }
             });
-            // console.log("ANIMATION LANGTH : ", object.animations.length);
+            // //console.log("ANIMATION LANGTH : ", object.animations.length);
             // const mixer = new THREE.AnimationMixer(object);
             // const action = mixer.clipAction(object.animations[0]);
             // action.play();
@@ -343,13 +355,16 @@ scene2.defineScene = function (sceneModelArr, shaderPass, playerPath) {
             action.play();
         });
     }
+
+    this.playerCollider.moveSpeed = 1;
+    setSpeedSliderValue(1);
 };
 // songprogress: 0~1
 scene2.updateScene = function (camera, songProgress) {
     this.frameCount += 1;
     if (this.gltfModelArr.length > 0) {
         this.gltfModelArr[0].position.y = -10 * (1 - songProgress * 2);
-        //console.log(this.gltfModelArr[0].position.y);
+        ////console.log(this.gltfModelArr[0].position.y);
     }
 
     // let scale = 0.9 + 0.05 * Math.sin(this.frameCount * 0.01);
@@ -369,7 +384,7 @@ const scene3 = new SceneBuilder();
 scene3.defineScene = function (sceneModelArr, shaderPass, playerPath) {
     // VIDEO TEXTURE (if applicable)
     const video = document.createElement("video");
-    video.src = "./assets/chapter_1/stage_3/bg.mov";
+    video.src = "./assets/chapter_1/stage_3/bg2.mov";
     video.loop = true;
     video.muted = true;
     video.play();
@@ -412,7 +427,7 @@ scene3.defineScene = function (sceneModelArr, shaderPass, playerPath) {
 
     playerPath.scale.set(10, 1, 10);
 
-    console.log(playerPath);
+    //console.log(playerPath);
 
     this.pathClone = playerPath.clone();
     this.pathClone.material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
@@ -464,6 +479,9 @@ scene3.defineScene = function (sceneModelArr, shaderPass, playerPath) {
             stageModelArr.push(object);
         });
     }
+
+    this.playerCollider.moveSpeed = 2;
+    setSpeedSliderValue(2);
 };
 
 scene3.updateScene = function () {
@@ -511,7 +529,7 @@ scene4.defineScene = function (sceneModelArr, shaderPass, playerPath) {
 
     playerPath.scale.set(1, 1, 1);
 
-    console.log(playerPath);
+    //console.log(playerPath);
 
     this.pathClone = playerPath.clone();
     this.pathClone.material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
@@ -551,7 +569,7 @@ scene4.defineScene = function (sceneModelArr, shaderPass, playerPath) {
                     child.material = objMaterial;
                 }
             });
-            // console.log("ANIMATION LANGTH : ", object.animations.length);
+            // //console.log("ANIMATION LANGTH : ", object.animations.length);
             // const mixer = new THREE.AnimationMixer(object);
             // const action = mixer.clipAction(object.animations[0]);
             // action.play();
@@ -566,6 +584,9 @@ scene4.defineScene = function (sceneModelArr, shaderPass, playerPath) {
             action.play();
         });
     }
+
+    this.playerCollider.moveSpeed = 3;
+    setSpeedSliderValue(3);
 };
 
 scene4.updateScene = function () {
@@ -628,7 +649,7 @@ scene5.defineScene = function (sceneModelArr, shaderPass, playerPath) {
 
     playerPath.scale.set(0.1, 0.1, 0.1);
 
-    console.log(playerPath);
+    //console.log(playerPath);
 
     this.pathClone = playerPath.clone();
     this.pathClone.material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
@@ -668,7 +689,7 @@ scene5.defineScene = function (sceneModelArr, shaderPass, playerPath) {
                     child.material = objMaterial;
                 }
             });
-            // console.log("ANIMATION LANGTH : ", object.animations.length);
+            // //console.log("ANIMATION LANGTH : ", object.animations.length);
             // const mixer = new THREE.AnimationMixer(object);
             // const action = mixer.clipAction(object.animations[0]);
             // action.play();
@@ -687,6 +708,9 @@ scene5.defineScene = function (sceneModelArr, shaderPass, playerPath) {
             action.play();
         });
     }
+
+    this.playerCollider.moveSpeed = 1.5;
+    setSpeedSliderValue(1.5);
 };
 
 scene5.updateScene = function () {
@@ -802,7 +826,7 @@ scene6.defineScene = function (sceneModelArr, shaderPass, playerPath) {
 
     playerPath.scale.set(1, 1, 1);
 
-    console.log(playerPath);
+    //console.log(playerPath);
 
     this.pathClone = playerPath.clone();
     this.pathClone.material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
@@ -877,7 +901,7 @@ scene6.defineScene = function (sceneModelArr, shaderPass, playerPath) {
         //             child.material = objMaterial;
         //         }
         //     });
-        //     // console.log("ANIMATION LANGTH : ", object.animations.length);
+        //     // //console.log("ANIMATION LANGTH : ", object.animations.length);
         //     // const mixer = new THREE.AnimationMixer(object);
         //     // const action = mixer.clipAction(object.animations[0]);
         //     // action.play();
@@ -896,6 +920,9 @@ scene6.defineScene = function (sceneModelArr, shaderPass, playerPath) {
         //     action.play();
         // });
     }
+
+    this.playerCollider.moveSpeed = 2;
+    setSpeedSliderValue(2);
 };
 
 scene6.updateScene = function () {
@@ -939,7 +966,7 @@ scene7.defineScene = function (sceneModelArr, shaderPass, playerPath) {
     columnGroup.traverse((child) => {
         if (child.isMesh) {
             child.material = new THREE.MeshBasicMaterial({
-                color: 0xff0000,
+                color: 0x0000ff,
                 wireframe: true,
             });
         }
@@ -959,7 +986,7 @@ scene7.defineScene = function (sceneModelArr, shaderPass, playerPath) {
 
     statueGroup.traverse((child) => {
         if (child.isMesh) {
-            child.material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
+            child.material = new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true });
         }
     });
 
@@ -1008,10 +1035,10 @@ scene7.defineScene = function (sceneModelArr, shaderPass, playerPath) {
 
     playerPath.scale.set(1, 1, 1);
 
-    console.log(playerPath);
+    //console.log(playerPath);
 
     this.pathClone = playerPath.clone();
-    this.pathClone.material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
+    this.pathClone.material = new THREE.MeshBasicMaterial({ color: 0x00a2ff, wireframe: true });
     this.scene.add(this.pathClone);
 
     // SET REFERENCES
@@ -1075,6 +1102,9 @@ scene7.defineScene = function (sceneModelArr, shaderPass, playerPath) {
             stageModelArr.push(object);
         });
     }
+
+    this.playerCollider.moveSpeed = 0.25;
+    setSpeedSliderValue(0.25);
 };
 
 scene7.updateScene = function () {
@@ -1214,7 +1244,7 @@ scene8.defineScene = function (sceneModelArr, shaderPass, playerPath) {
     // PATH MATERIAL OVERRIDE/RESET
     playerPath.visible = false;
 
-    console.log(playerPath);
+    //console.log(playerPath);
 
     this.pathClone = playerPath.clone();
     this.pathClone.material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
@@ -1281,6 +1311,8 @@ scene8.defineScene = function (sceneModelArr, shaderPass, playerPath) {
             stageModelArr.push(object);
         });
     }
+    this.playerCollider.moveSpeed = 0.25;
+    setSpeedSliderValue(0.25);
 };
 
 scene8.updateScene = function (camera, songProgress) {
@@ -1294,7 +1326,7 @@ scene8.updateScene = function (camera, songProgress) {
             Math.sin(this.frameCount * 0.1 * 0.8 + i * 2.0) * noiseAmplitude,
             Math.cos(this.frameCount * 0.1 * 0.3 + i * 1.5) * noiseAmplitude
         );
-        sprite.position.lerp(currentPos.add(noise), 0.0001);
+        sprite.position.lerp(currentPos.add(noise), 0.00025);
     });
     // let scale = 0.9 + 0.05 * Math.sin(this.frameCount * 0.01);
 
@@ -1326,8 +1358,8 @@ scene9.defineScene = function (sceneModelArr, shaderPass, playerPath) {
     let metallicMat = new THREE.MeshStandardMaterial({
         envMap: envMap,
         side: THREE.DoubleSide,
-        roughness: 0.1,
-        metalness: 0.25,
+        roughness: 0.05,
+        metalness: 0.9,
     });
 
     // VIDEO TEXTURE (if applicable)
@@ -1446,9 +1478,9 @@ scene9.defineScene = function (sceneModelArr, shaderPass, playerPath) {
     this.shaderPass.uniforms.stageNumber.value = 9;
 
     // STAGE-SPECIFIC MODELS IMPORT/SETUP
-    let stageModelNum = 0;
+    let stageModelNum = 2;
     let scene = this.scene;
-    this.modelPath = "./assets/chapter_2/stage_6/";
+    this.modelPath = "./assets/chapter_2/stage_9/";
     this.stageModelArr = [];
     let stageModelArr = this.stageModelArr;
 
@@ -1459,45 +1491,39 @@ scene9.defineScene = function (sceneModelArr, shaderPass, playerPath) {
         // TEXTURE IMPORT / SETUP
         //const texture = this.textureLoader.load(this.modelPath + "tex" + (i + 1) + ".png");
         //let objMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff, wireframe: false, map: texture });
-        let objMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
+        let objMaterial = metallicMat;
 
-        let modelName = "mesh" + (i + 1) + ".fbx";
+        let modelName = "mesh" + (i + 1) + ".gltf";
         let url = this.modelPath + modelName;
 
-        this.fbxLoader.load(url, function (object) {
-            object.scale.set(0.25, 0.25, 0.25);
-            //object.translateZ(5.0);
-            object.traverse(function (child) {
+        this.gltfLoader.load(url, function (gltf) {
+            gltf.scene.traverse(function (child) {
                 if (child.isMesh) {
-                    child.material = objMaterial;
-
-                    const geometry = child.geometry;
-                    const positionAttribute = geometry.attributes.position;
-                    for (let i = 0; i < positionAttribute.count; i++) {
-                        const x = positionAttribute.getX(i);
-                        const y = positionAttribute.getY(i);
-                        const z = positionAttribute.getZ(i);
-
-                        let spriteMaterialIndex = Math.floor(Math.random() * 3);
-                        const sprite = new THREE.Sprite(spriteMaterialArr[spriteMaterialIndex]);
-                        const localPos = new THREE.Vector3(x, y, z);
-                        const worldPos = child.localToWorld(localPos.clone());
-                        sprite.position.copy(worldPos);
-                        sprite.scale.set(0.15, 0.15, 0.15);
-                        scene.add(sprite);
-                    }
+                    if (i == 0) child.material = objMaterial;
+                    else child.material = new THREE.MeshNormalMaterial({ wireframe: true });
                 }
             });
+            // //console.log("ANIMATION LANGTH : ", object.animations.length);
+            // const mixer = new THREE.AnimationMixer(object);
+            // const action = mixer.clipAction(object.animations[0]);
+            // action.play();
 
-            // object.position.set(
-            //     (Math.random() - 0.5) * 2 * 20,
-            //     (Math.random() - 0.5) * 2 * 20,
-            //     (Math.random() - 0.5) * 2 * 20
-            // );
-            scene.add(object);
-            stageModelArr.push(object);
+            //object.scale.set(1, 1, 1);
+            scene.add(gltf.scene);
+            if (i == 0) {
+                gltf.scene.scale.set(20, 20, 20);
+                gltf.scene.position.set(0, -70, -60);
+            } else if (i == 1) {
+                gltf.scene.scale.set(1, 0.5, 1);
+                gltf.scene.position.set(0, 0, 0);
+            }
+
+            stageModelArr.push(gltf.scene);
         });
     }
+
+    this.playerCollider.moveSpeed = 4;
+    setSpeedSliderValue(4);
 };
 
 scene9.updateScene = function (camera, songProgress) {
@@ -1521,6 +1547,7 @@ scene9.updateScene = function (camera, songProgress) {
     });
 };
 
+// TRACK 10: RUSH HOUR
 const scene10 = new SceneBuilder();
 scene10.defineScene = function (sceneModelArr, shaderPass, playerPath) {
     shaderPass.uniforms.stageNumber.value = 10;
@@ -1532,12 +1559,12 @@ scene10.defineScene = function (sceneModelArr, shaderPass, playerPath) {
     this.pointLight = new THREE.PointLight();
     this.scene.add(this.pointLight);
 
-    const buildingModel = sceneModelArr[1].children[0];
-    const roadModel = sceneModelArr[0].children[0];
-    console.log(buildingModel);
+    const buildingModel = sceneModelArr.find((group) => group.name === "BUILDINGS");
+    const roadModel = sceneModelArr.find((group) => group.name === "ROADS");
+    //console.log(buildingModel);
 
     const video = document.createElement("video");
-    video.src = "./assets/video/demo3.mov";
+    video.src = "./assets/video/demo4.mov";
     video.loop = true;
     video.muted = true;
     video.play();
@@ -1548,11 +1575,16 @@ scene10.defineScene = function (sceneModelArr, shaderPass, playerPath) {
     videoTexture.magFilter = THREE.LinearFilter;
     videoTexture.generateMipmaps = false;
 
-    buildingModel.material = new THREE.MeshBasicMaterial({ map: videoTexture, side: THREE.DoubleSide });
-
+    buildingModel.traverse((child) => {
+        if (child.isMesh) {
+            child.material = new THREE.MeshBasicMaterial({ map: videoTexture, side: THREE.DoubleSide });
+        }
+        //child.material.needsUpdate = true;
+    });
     // hdri texture test
 
-    const envMap = this.textureLoader.load([
+    const cubeTextureLoader = new THREE.CubeTextureLoader();
+    const envMap = cubeTextureLoader.load([
         "./assets/cubeMaps/cubeMap1/nx.png",
         "./assets/cubeMaps/cubeMap1/ny.png",
         "./assets/cubeMaps/cubeMap1/nz.png",
@@ -1593,7 +1625,7 @@ scene10.defineScene = function (sceneModelArr, shaderPass, playerPath) {
 
         gltf.scene.traverse((child) => {
             if (child.isMesh) {
-                console.log(child);
+                //console.log(child);
                 child.material = carMat;
             } else {
                 child.material = carMat;
@@ -1602,16 +1634,17 @@ scene10.defineScene = function (sceneModelArr, shaderPass, playerPath) {
         });
         scene.add(gltf.scene);
 
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 200; i++) {
             const clone = gltf.scene.clone();
-            clone.position.set(Math.random() * 100 - 50, Math.random() * 100 - 50, Math.random() * 100 - 50);
+            clone.position.set(Math.random() * 30 - 15, Math.random() * 30 - 15, Math.random() * 30 - 15);
             clone.rotation.set(Math.random() * 360, Math.random() * 360, Math.random() * 360);
             clone.scale.set(0.5, 0.5, 0.5);
             carMeshArr.push(clone);
-            carMeshGroup.add(clone);
+            scene.add(clone);
+            //carMeshGroup.add(clone);
         }
 
-        scene.add(carMeshGroup);
+        //scene.add(carMeshGroup);
     });
 
     const bgSphereGeo = new THREE.SphereGeometry(100, 10, 10, 10);
@@ -1619,13 +1652,33 @@ scene10.defineScene = function (sceneModelArr, shaderPass, playerPath) {
     const bgSphereMesh = new THREE.Mesh(bgSphereGeo, bgSphereMat);
 
     this.scene.add(bgSphereMesh);
+    this.playerCollider.moveSpeed = 10;
+    setSpeedSliderValue(10);
 };
 scene10.updateScene = function (camera) {
     this.pointLight.position.copy(camera.position);
-    this.carMeshGroup.rotateX(0.01);
+    //this.carMeshGroup.rotateX(0.01);
+
+    this.carMeshArr.forEach((mesh, i) => {
+        // let noiseAmplitude = 10.0;
+        // const noise = new THREE.Vector3(
+        //     Math.sin(this.frameCount * 0.1 * 0.5 + i * 100) * noiseAmplitude,
+        //     Math.sin(this.frameCount * 0.1 * 0.8 + i * 2.0) * noiseAmplitude,
+        //     Math.cos(this.frameCount * 0.1 * 0.3 + i * 1.5) * noiseAmplitude
+        // );
+        // sprite.position.lerp(currentPos.add(noise), 0.0001);
+        if (camera.position.distanceTo(mesh.position) < 5) {
+            mesh.position.lerp(camera.position, 0.025);
+        }
+        mesh.rotateX(0.01);
+        mesh.rotateY(0.01);
+        mesh.rotateZ(0.01);
+    });
+
     this.frameCount++;
 };
 
+// TRACK 11: KTM
 const scene11 = new SceneBuilder();
 scene11.defineScene = function (sceneModelArr, shaderPass, playerPath) {
     const cubeTextureLoader = new THREE.CubeTextureLoader();
@@ -1722,7 +1775,7 @@ scene11.defineScene = function (sceneModelArr, shaderPass, playerPath) {
                     child.material = objMaterial;
                 }
             });
-            // console.log("ANIMATION LANGTH : ", object.animations.length);
+            // //console.log("ANIMATION LANGTH : ", object.animations.length);
             // const mixer = new THREE.AnimationMixer(object);
             // const action = mixer.clipAction(object.animations[0]);
             // action.play();
@@ -1756,7 +1809,8 @@ scene11.defineScene = function (sceneModelArr, shaderPass, playerPath) {
         });
     }
 
-    this.playerCollider.moveSpeed = 2.0;
+    this.playerCollider.moveSpeed = 3;
+    setSpeedSliderValue(3);
 };
 scene11.updateScene = function (camera, songProgress) {
     this.pointLight.position.copy(camera.position);
@@ -1799,6 +1853,7 @@ scene11.updateScene = function (camera, songProgress) {
     });
 };
 
+// track 12: KKB
 const scene12 = new SceneBuilder();
 scene12.defineScene = function (sceneModelArr, shaderPass, playerPath) {
     // const cubeTextureLoader = new THREE.CubeTextureLoader();
@@ -1896,7 +1951,7 @@ scene12.defineScene = function (sceneModelArr, shaderPass, playerPath) {
                     child.material = objMaterial;
                 }
             });
-            // console.log("ANIMATION LANGTH : ", object.animations.length);
+            // //console.log("ANIMATION LANGTH : ", object.animations.length);
             // const mixer = new THREE.AnimationMixer(object);
             // const action = mixer.clipAction(object.animations[0]);
             // action.play();
@@ -1925,7 +1980,8 @@ scene12.defineScene = function (sceneModelArr, shaderPass, playerPath) {
         });
     }
 
-    this.playerCollider.moveSpeed = 2.0;
+    this.playerCollider.moveSpeed = 2;
+    setSpeedSliderValue(2);
 };
 scene12.updateScene = function (camera, songProgress) {
     this.pointLight.position.copy(camera.position);
@@ -1946,6 +2002,7 @@ scene12.updateScene = function (camera, songProgress) {
     });
 };
 
+// track 13 982
 const scene13 = new SceneBuilder();
 scene13.defineScene = function (sceneModelArr, shaderPass, playerPath) {
     const cubeTextureLoader = new THREE.CubeTextureLoader();
@@ -2061,7 +2118,8 @@ scene13.defineScene = function (sceneModelArr, shaderPass, playerPath) {
         this.spriteArr.push(sprite);
     }
 
-    this.playerCollider.moveSpeed = 2.0;
+    this.playerCollider.moveSpeed = 2;
+    setSpeedSliderValue(2);
 
     this.createTextOverlay("READY??");
     this.catchCount = 0;
@@ -2081,13 +2139,13 @@ scene13.updateScene = function (camera, songProgress) {
     const currentPos = new THREE.Vector3();
     currentPos.copy(camera.position);
     let randomRange = 10;
-    //console.log(camera.position, this.spriteArr[0].position);
+    ////console.log(camera.position, this.spriteArr[0].position);
     this.spriteArr.forEach((sprite, i) => {
         if (currentPos.distanceTo(sprite.position) < 1) {
             let x = Math.random() * randomRange * 2 - randomRange;
             let y = Math.random() * randomRange * 2 - randomRange;
             let z = Math.random() * randomRange * 2 - randomRange;
-            console.log("WHY ARE YOU READING THIS?? GET OUT");
+            //console.log("WHY ARE YOU READING THIS?? GET OUT");
             sprite.position.set(x, y, z);
 
             this.catchCount += 1;

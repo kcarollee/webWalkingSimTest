@@ -165,7 +165,7 @@ canvas { display: block; }
    left: 50%;
    transform: translateX(-50%); /* Centering the dropdown */
    /* background: transparent; */
-   background-color: black;
+   background-color: red;
    display: none;
    flex-direction: column;
    padding: 5px 5px;
@@ -192,12 +192,24 @@ canvas { display: block; }
    display: flex;
 }
 
+.info-text{
+   position: absolute;
+   bottom: 5%;
+   
+   color: white;
+   /* transform: translateY(450px); */
+   font-size: 20px;
+   font-family: "ChosunSM";
+   text-align: center;
+   line-height: 1.2;
+}
+
 .slider-wrapper {
       /* display: flex; */
       font-family: "ChosunSM";
       /* align-items: center; */
       margin-top: 2px;
-      font-size: 20px;
+      font-size: 25px;
       gap: 16px;
       transform: translateY(-200px);
       background-color: red;
@@ -213,7 +225,7 @@ canvas { display: block; }
       -webkit-appearance: none;
       width: 300px;
       height: 2px;
-      margin-top: 9px;
+      margin-top: 12px;
       background: white;
     }
 

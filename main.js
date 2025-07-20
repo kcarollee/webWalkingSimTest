@@ -26,7 +26,7 @@ function main() {
     // let shaderViewOn = true;
     // const controls = new (function () {
     //     this.outputObj = function () {
-    //         scene.children.forEach((c) => console.log(c));
+    //         scene.children.forEach((c) => //console.log(c));
     //     };
     // })();
 
@@ -43,7 +43,7 @@ function main() {
     //     sceneLoader.playerPathColliderDebugMaterial.visible = value;
     // });
     // gui.add(debugSettings, "pathPhysicsTest").onChange((value) => {
-    //     console.log(sceneLoader.getPathPhysicsBody());
+    //     //console.log(sceneLoader.getPathPhysicsBody());
     // });
 
     //CAMERA
@@ -82,7 +82,7 @@ function main() {
         // Get frequency data
         const data = audioAnalyzer.getFrequencyData();
         const newDataNum = data.length * 0.75;
-        // console.log(data.length);
+        // //console.log(data.length);
         ctx.fillStyle = "black";
         const width = ctxCanvas.width / newDataNum;
         for (let i = 0; i < newDataNum; i++) {
@@ -106,7 +106,7 @@ function main() {
     const playerCollider = new PlayerCollider(new THREE.Vector3(0.6, 0.01, -0.1));
 
     loadingManager.onLoad = function () {
-        console.log("ASSETS LOADED");
+        //console.log("ASSETS LOADED");
         const currentSceneDef = sceneDef[currentTrackNumber];
         const initPos = currentSceneDef.initPos;
         playerCollider.reset();
@@ -306,7 +306,7 @@ function main() {
             const nextSceneNumber = this.getAttribute("data-next");
 
             if (currentTrackNumber == sceneNumber) {
-                console.log("RESUME");
+                //console.log("RESUME");
                 playerControls.lock();
                 sound.play();
                 pause = false;
@@ -341,16 +341,16 @@ function main() {
 
                 // if chapter is different, clearScene + clearPhysicsBody
                 if (currentChapter !== previousChapter) {
-                    console.log("DIFFERENT CHAPTER");
+                    //console.log("DIFFERENT CHAPTER");
                     sceneLoader.clearScene();
-                    sceneLoader.clearPhysicsBody();
+                    //sceneLoader.clearPhysicsBody();
                 }
                 // else claerModelsOnly + clearPhysicsBody
                 else {
-                    console.log("SAME CHAPTER");
+                    //console.log("SAME CHAPTER");
                     sceneLoader.clearScene();
                     sceneLoader.clearModelsOnly();
-                    sceneLoader.clearPhysicsBody();
+                    //sceneLoader.clearPhysicsBody();
                 }
             }
 
@@ -368,9 +368,9 @@ function main() {
 
     // document.addEventListener("keydown", function (event) {
     //     if (event.key === "Escape") {
-    //         console.log("RESUME");
+    //         //console.log("RESUME");
     //         if (!playerControls.isLocked) {
-    //             console.log("NOT LOCKED TO LOCK");
+    //             //console.log("NOT LOCKED TO LOCK");
     //             playerControls.lock();
     //             sound.play();
     //         }
@@ -414,7 +414,7 @@ function main() {
 
             const currentTime = sound.context.currentTime - soundContextOffset;
             songProgress = currentTime / duration;
-            //console.log(currentTime, triggerTime, transitionTriggered);
+            ////console.log(currentTime, triggerTime, transitionTriggered);
             // if (currentTime > triggerTime && !transitionTriggered) {
             //     gsap.to(shaderPass.uniforms.transition, {
             //         duration: 0.5,
@@ -423,7 +423,7 @@ function main() {
             //         repeat: 1,
             //     });
             //     transitionTriggered = true;
-            //     console.log("TRANSITION UPON TRACK ENDING");
+            //     //console.log("TRANSITION UPON TRACK ENDING");
             // }
         }
     }
@@ -463,6 +463,9 @@ function main() {
         overlay.style.display = "none";
         const sliders = document.querySelectorAll(".slider-wrapper");
         sliders.forEach((slider) => [(slider.style.display = "none")]);
+
+        const infoText = document.querySelector(".info-text");
+        infoText.style.display = "none";
     });
 
     playerControls.addEventListener("unlock", () => {
@@ -483,6 +486,7 @@ function main() {
         if (!pause) {
             playerCollider.movePlayer(camera);
             playerCollider.updatePlayer(camera);
+            // //console.log(camera.position);
         }
     }
 
@@ -527,6 +531,7 @@ function main() {
         // renderer.render(sceneLoader.getScene(), camera);
 
         if (introSceneMode) {
+            shaderPass.uniforms.stageNumber.value = 13;
             if (introModelsLoaded) {
                 introMeshArr.forEach((mesh) => {
                     if (mesh.geometry) mesh.geometry.setDrawRange(0, tick * 50);
@@ -584,6 +589,7 @@ function main() {
         const needResize = canvas.width !== width || canvas.height !== height;
         if (needResize) {
             renderer.setSize(width, height, false);
+            composer.setSize(width, height);
         }
         return needResize;
     }

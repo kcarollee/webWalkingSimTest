@@ -185,7 +185,7 @@ const sceneDef = [
         modelURLArr: [],
         modelNameArr: [],
         trackURL: "./assets/audio/tailbone.mp3",
-        initPos: [1.66, 3.5, 1.65],
+        initPos: [1.38672, 0.62669, 0.10881],
     },
 
     {
@@ -269,7 +269,7 @@ const sceneDef = [
         ],
         modelNameArr: ["BUILDINGS", "ROADS"],
         trackURL: "./assets/audio/ktm.mp3",
-        initPos: [0.6, 0.01, -0.1],
+        initPos: [1.0399, 1.46338, -8.9986],
     },
     {
         sceneNumber: 11,
@@ -295,6 +295,6 @@ const sceneDef = [
         ],
         modelNameArr: ["BUILDINGS", "ROADS"],
         trackURL: "./assets/audio/982.mp3",
-        initPos: [0.6, 0.01, -0.1],
+        initPos: [6.8029511, 3.5857358, -4.8513],
     },
 ];

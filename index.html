@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <title>9B2 Planet Observer Simulator</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.min.js"></script>
         <script src="https://cdn.rawgit.com/mrdoob/stats.js/r17/build/stats.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.7/gsap.min.js"></script>
+        <link rel="icon" type="image/x-icon" href="./assets/logo.ico" />
         <link rel="stylesheet" type="text/css" href="style.css" />
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
@@ -23,17 +25,16 @@
     <script type="module" src="main.js"></script>
     <body>
         <div class="mobile-only">
-            <!-- 🎥 Background Video -->
             <video class="bg-video" autoplay muted loop playsinline>
                 <source src="./assets/video/mobilebg.mov" type="video/mp4" />
             </video>
             <div class="content">
                 <p>
-                    9B2의 행성관찰자시뮬레이터는 데스크탑 환경에서 실행해주시기 바랍니다.<br /><br />
+                    9B2의 행성 관찰자 시뮬레이터는 데스크탑 환경에서 실행해주시기 바랍니다.<br /><br />
                     9B2's Planet Observer Simulator is only available for desktop.
                 </p>
                 <br />
-                <p>Checkout Kick, Fuck, Kill on the following platforms:</p>
+                <p>Checkout "Kick, Fuck, Kill" on the following platforms:</p>
 
                 <div class="links">
                     <a href="https://example.com/kick" target="_blank">SPOTIFY</a><br />
@@ -57,6 +58,7 @@
                     <input type="range" min="0" max="1" step="0.01" value="0.5" id="speed-slider" />
                     <div class="label" id="speed-value">50%</div>
                 </div>
+                <div class="info-text"></div>
                 <div class="temp-overlay-text">
                     <div class="number-link">
                         <span class="chapter-name"></span>
@@ -232,11 +234,13 @@
         const isMobile = window.mobileCheck();
         console.log(isMobile);
         const chapterListStrings = [
-            "{ _ _ _ CHAPTER_01 : KICK _ _ _ }",
-            "{ _ _ _ CHAPTER_02 : FUCK _ _ _ }",
-            "{ _ _ _ CHAPTER_03 : KILL _ _ _ }",
+            "{ _ _ CHAPTER_01 : KICK _ _ }",
+            "{ _ _ CHAPTER_02 : FUCK _ _ }",
+            "{ _ _ CHAPTER_03 : KILL _ _ }",
         ];
-
+        const infoText =
+            "행성 관찰자 시뮬레이터\n\nWASD + Mouse to move\n광과민성 반응 주의 (Flashing Graphics Warning)";
+        let infoTextIndex = 0;
         let stringIndices = [0, 0, 0];
 
         let stringDoneLoading = [0, 0, 0];
@@ -254,6 +258,19 @@
             setTimeout(triggerTrackListAnimation, 50);
         }
 
+        let infoTextElem = document.querySelector(".info-text");
+        function triggerInfoTextAnimation() {
+            if (infoTextIndex < infoText.length) {
+                let nextChar = infoText[infoTextIndex];
+
+                if (nextChar === "\n") infoTextElem.innerHTML += "<br/>";
+                else infoTextElem.innerHTML += nextChar;
+
+                infoTextIndex++;
+            } else return;
+            setTimeout(triggerInfoTextAnimation, 50);
+        }
+
         function resetTrackListStrings() {
             document.querySelectorAll(".chapter-name").forEach((entry) => {
                 entry.textContent = "";
@@ -269,6 +286,9 @@
             return sum == chapterListStrings.length;
         }
 
-        if (!isMobile) triggerTrackListAnimation();
+        if (!isMobile) {
+            triggerTrackListAnimation();
+            triggerInfoTextAnimation();
+        }
     </script>
 </html>
