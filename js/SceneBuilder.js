@@ -169,14 +169,34 @@ scene1.updateScene = function (camera, songProgress) {
 // TRACK 2: LEMON TEA
 const scene2 = new SceneBuilder();
 scene2.defineScene = function (sceneModelArr, shaderPass, playerPath) {
+    // ENVMAP
+    const cubeTextureLoader = new THREE.CubeTextureLoader();
+    const envMap = cubeTextureLoader.load([
+        "./assets/cubeMaps/cubeMap3/nx.png",
+        "./assets/cubeMaps/cubeMap3/ny.png",
+        "./assets/cubeMaps/cubeMap3/nz.png",
+        "./assets/cubeMaps/cubeMap3/px.png",
+        "./assets/cubeMaps/cubeMap3/py.png",
+        "./assets/cubeMaps/cubeMap3/pz.png",
+    ]);
+    envMap.mapping = THREE.CubeRefractionMapping;
+    this.scene.environment = envMap;
+    let metallicMat = new THREE.MeshStandardMaterial({
+        envMap: envMap,
+        side: THREE.DoubleSide,
+        roughness: 0.1,
+        metalness: 0.8,
+    });
+
     // BACKGROUND
-    this.scene.background = new THREE.Color(0xffa500);
+    this.scene.background = new THREE.Color(0xeea500);
 
     // LIGHTS
     this.ambientLight = new THREE.AmbientLight(0xffffff);
     this.scene.add(this.ambientLight);
 
     // PATH MATERIAL OVERRIDE/RESET
+
     playerPath.material.color = new THREE.Color(0x0000ff);
     playerPath.material.wireframe = true;
 
@@ -187,7 +207,7 @@ scene2.defineScene = function (sceneModelArr, shaderPass, playerPath) {
 
     // VIDEO TEXTURE (if applicable)
     const video = document.createElement("video");
-    video.src = "./assets/chapter_1/stage_2/waterTex3.mov";
+    video.src = "./assets/chapter_1/stage_2/waterTex.mov";
     video.loop = true;
     video.muted = true;
     video.play();
@@ -199,7 +219,7 @@ scene2.defineScene = function (sceneModelArr, shaderPass, playerPath) {
     videoTexture.generateMipmaps = false;
 
     const video2 = document.createElement("video");
-    video2.src = "./assets/chapter_1/stage_2/tongue.mp4";
+    video2.src = "./assets/chapter_1/stage_2/tongue2.mov";
     video2.loop = true;
     video2.muted = true;
     video2.play();
@@ -210,69 +230,138 @@ scene2.defineScene = function (sceneModelArr, shaderPass, playerPath) {
     videoTexture2.magFilter = THREE.LinearFilter;
     videoTexture2.generateMipmaps = false;
 
-    // "WATER" EFFECT BOX MESH
-    this.boxGeom = new THREE.BoxGeometry(100, 10, 100);
-    this.boxMat = new THREE.MeshBasicMaterial({ color: 0x0000ff, side: THREE.DoubleSide, map: videoTexture });
-    this.boxMesh = new THREE.Mesh(this.boxGeom, this.boxMat);
-    this.scene.add(this.boxMesh);
-
-    this.boxMesh.position.y = -10;
-
     // SET stageNumber SHADER UNIFROM
     this.shaderPass.uniforms.stageNumber.value = 2;
 
     // STAGE-SPECIFIC MODELS IMPORT/SETUP
-    let stageModelNum = 3;
+
+    let stageModelNum = 2;
     let scene = this.scene;
     this.modelPath = "./assets/chapter_1/stage_2/";
+    this.stageModelArr = [];
+    let stageModelArr = this.stageModelArr;
+    this.stageModelGroup = new THREE.Group();
+    let stageModelGroup = this.stageModelGroup;
+    for (let j = 0; j < 20; j++) {
+        for (let i = 0; i < 2; i++) {
+            // TEXTURE IMPORT / SETUP
+            const texture = this.textureLoader.load(this.modelPath + "tex" + (i + 1) + ".png");
+            let objMaterial;
+            if (i == 1) {
+                objMaterial = new THREE.MeshBasicMaterial({
+                    color: 0xffffff,
+                    wireframe: false,
+                    map: videoTexture2,
+                    side: THREE.DoubleSide,
+                });
+            } else {
+                objMaterial = new THREE.MeshBasicMaterial({
+                    color: 0xffffff,
+                    wireframe: true,
+                    //map: texture,
+                    side: THREE.DoubleSide,
+                });
+            }
 
-    for (let i = 0; i < stageModelNum; i++) {
+            let modelName = "mesh" + (i + 1) + ".fbx";
+
+            let url = this.modelPath + modelName;
+
+            this.fbxLoader.load(url, function (object) {
+                object.traverse(function (child) {
+                    if (child.isMesh) {
+                        child.material = objMaterial;
+                    }
+                });
+
+                object.scale.set(0.25, 0.25, 0.25);
+                let x = Math.random() * 20 - 10;
+                let y = Math.random() * 20 - 10;
+                let z = Math.random() * 20 - 10;
+                object.position.set(x, y, z);
+                object.rotateX(Math.random() * Math.PI * 2);
+                object.rotateY(Math.random() * Math.PI * 2);
+                object.rotateZ(Math.random() * Math.PI * 2);
+                //scene.add(object);
+                stageModelGroup.add(object);
+            });
+            scene.add(this.stageModelGroup);
+        }
+    }
+
+    this.gltfModelNum = 2;
+    this.animationMixerArr = [];
+    this.gltfModelArr = [];
+    let animationMixerArr = this.animationMixerArr;
+    let gltfModelArr = this.gltfModelArr;
+    for (let i = 0; i < this.gltfModelNum; i++) {
         // TEXTURE IMPORT / SETUP
-        const texture = this.textureLoader.load(this.modelPath + "tex" + (i + 1) + ".png");
+        //const texture = this.textureLoader.load(this.modelPath + "tex" + (i + 1) + ".png");
+        //let objMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff, wireframe: false, map: texture });
         let objMaterial;
-        if (i == 1) {
+        if (i == 0) {
             objMaterial = new THREE.MeshBasicMaterial({
                 color: 0xffffff,
                 wireframe: false,
-                map: videoTexture2,
                 side: THREE.DoubleSide,
+                opacity: 0.8,
+                map: videoTexture,
             });
         } else {
-            objMaterial = new THREE.MeshNormalMaterial({
-                color: 0xffffff,
-                wireframe: false,
-                //map: texture,
-                side: THREE.DoubleSide,
-            });
+            objMaterial = metallicMat;
         }
 
-        let modelName = "mesh" + (i + 1) + ".fbx";
+        let modelName = "sea.gltf";
         let url = this.modelPath + modelName;
 
-        this.fbxLoader.load(url, function (object) {
-            object.traverse(function (child) {
+        // FOR ANIMATED MODELS, EXPORT FROM HOUDINI AS GLTF, BUT THERE SHOULD BE NO CHANGE TO THE NUMBER OF
+        // VERTICES
+        this.gltfLoader.load(url, function (gltf) {
+            gltf.scene.traverse(function (child) {
                 if (child.isMesh) {
                     child.material = objMaterial;
                 }
             });
-            object.scale.set(0.5, 0.5, 0.5);
-            if (i == 2) {
-                object.rotateX(180);
-                object.rotateY(-90);
+            // console.log("ANIMATION LANGTH : ", object.animations.length);
+            // const mixer = new THREE.AnimationMixer(object);
+            // const action = mixer.clipAction(object.animations[0]);
+            // action.play();
 
-                object.scale.set(-0.5, -0.5, -0.5);
+            //object.scale.set(1, 1, 1);
+            if (i == 0) {
+                gltf.scene.scale.set(100, 10, 100);
+
+                gltf.scene.position.set(0, -10, 0);
+            } else {
+                gltf.scene.scale.set(200, 200, 200);
             }
-            scene.add(object);
+            gltfModelArr.push(gltf.scene);
+            scene.add(gltf.scene);
+            const mixer = new THREE.AnimationMixer(gltf.scene);
+            const action = mixer.clipAction(gltf.animations[0]);
+            animationMixerArr.push(mixer);
+            action.play();
         });
     }
 };
 // songprogress: 0~1
 scene2.updateScene = function (camera, songProgress) {
     this.frameCount += 1;
-    this.boxMesh.position.y = -10 * (1 - songProgress);
+    if (this.gltfModelArr.length > 0) {
+        this.gltfModelArr[0].position.y = -10 * (1 - songProgress * 2);
+        //console.log(this.gltfModelArr[0].position.y);
+    }
+
     // let scale = 0.9 + 0.05 * Math.sin(this.frameCount * 0.01);
     // this.playerPath.scale.set(scale, scale, scale);
     // this.playerPath.rotateY(scale * 0.001);
+    this.animationMixerArr.forEach((mixer, i) => {
+        mixer.update(0.01 * (i + 1));
+    });
+
+    this.stageModelGroup.rotateX(songProgress * 0.05);
+    this.stageModelGroup.rotateY(songProgress * 0.05);
+    this.stageModelGroup.rotateZ(songProgress * 0.05);
 };
 
 // TRACK 3: VARIOUS THINGS
@@ -1557,9 +1646,9 @@ scene11.defineScene = function (sceneModelArr, shaderPass, playerPath) {
         metalness: 1.0,
     });
 
-    shaderPass.uniforms.stageNumber.value = 10;
+    shaderPass.uniforms.stageNumber.value = 11;
 
-    this.scene.background = new THREE.Color(0x000000);
+    this.scene.background = new THREE.Color(0xff5c00);
     this.ambientLight = new THREE.AmbientLight(0xffffff);
     this.scene.add(this.ambientLight);
 
@@ -1569,29 +1658,21 @@ scene11.defineScene = function (sceneModelArr, shaderPass, playerPath) {
     const buildingModel = sceneModelArr.find((group) => group.name === "BUILDINGS");
     const roadModel = sceneModelArr.find((group) => group.name === "ROADS");
     this.buildingModelClone = buildingModel.clone();
-    this.roadModelClone = roadModel.clone();
+    // this.roadModelClone = roadModel.clone();
     buildingModel.traverse((child) => {
         if (child.isMesh) {
-            child.material = new THREE.MeshPhongMaterial({ color: 0xffffff, wireframe: true });
+            child.material = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
         }
     });
 
-    roadModel.traverse((child) => {
+    this.buildingModelClone.traverse((child) => {
         if (child.isMesh) {
-            child.material = new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true });
+            child.material = new THREE.MeshBasicMaterial({ color: 0x000000, wireframe: true });
         }
     });
+    this.scene.add(this.buildingModelClone);
 
-    const roadTexture = this.textureLoader.load("./assets/chapter_3/stage_1/roadNormal.png");
-    roadModel.material = new THREE.MeshStandardMaterial({
-        envMap: envMap,
-        normalMap: roadTexture,
-        map: roadTexture,
-        //normalScale: 2.0,
-        side: THREE.DoubleSide,
-        roughness: 0.0,
-        metalness: 0.65,
-    });
+    roadModel.visible = false;
 
     // VIDEO TEXTURE (if applicable)
     this.videoTextureArr = [];
@@ -1621,7 +1702,14 @@ scene11.defineScene = function (sceneModelArr, shaderPass, playerPath) {
         // TEXTURE IMPORT / SETUP
         //const texture = this.textureLoader.load(this.modelPath + "tex" + (i + 1) + ".png");
         //let objMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff, wireframe: false, map: texture });
-        let objMaterial = new THREE.MeshNormalMaterial();
+        //let objMaterial = new THREE.MeshNormalMaterial();
+        let objMaterial = new THREE.MeshBasicMaterial({
+            color: new THREE.Color().setRGB(
+                Math.random() * 0.5 + 0.5,
+                Math.random() * 0.5 + 0.5,
+                Math.random() * 0.5 + 0.5
+            ),
+        });
 
         let modelName = "mesh" + 1 + ".gltf";
         let url = this.modelPath + modelName;
@@ -1650,8 +1738,8 @@ scene11.defineScene = function (sceneModelArr, shaderPass, playerPath) {
             gltf.scene.position.set(x, y, z);
             gltf.scene.rotateY(Math.random() * Math.PI * 2);
 
-            gltf.scene.rotateDeg = Math.random() * 0.01 - 0.005;
-            gltf.scene.posChangeInterval = Math.floor(Math.random() * 300 + 300);
+            gltf.scene.rotateDeg = Math.random() * 0.1 - 0.05;
+            gltf.scene.posChangeInterval = Math.floor(Math.random() * 200 + 200);
 
             modelInitialPosArr.push(new THREE.Vector3(x, y, z));
             stageModelArr.push(gltf.scene);
@@ -1708,6 +1796,153 @@ scene11.updateScene = function (camera, songProgress) {
     this.stageModelArr.forEach((model, i) => {
         model.position.copy(this.modelInitialPosArr[i]);
         model.rotateY(model.rotateDeg);
+    });
+};
+
+const scene12 = new SceneBuilder();
+scene12.defineScene = function (sceneModelArr, shaderPass, playerPath) {
+    // const cubeTextureLoader = new THREE.CubeTextureLoader();
+    // const envMap = cubeTextureLoader.load([
+    //     "./assets/cubeMaps/cubeMap1/nx.png",
+    //     "./assets/cubeMaps/cubeMap1/ny.png",
+    //     "./assets/cubeMaps/cubeMap1/nz.png",
+    //     "./assets/cubeMaps/cubeMap1/px.png",
+    //     "./assets/cubeMaps/cubeMap1/py.png",
+    //     "./assets/cubeMaps/cubeMap1/pz.png",
+    // ]);
+    // envMap.mapping = THREE.CubeRefractionMapping;
+    // this.scene.environment = envMap;
+    // const metallicMat = new THREE.MeshStandardMaterial({
+    //     envMap: envMap,
+    //     side: THREE.DoubleSide,
+    //     roughness: 0.1,
+    //     metalness: 1.0,
+    // });
+
+    shaderPass.uniforms.stageNumber.value = 12;
+
+    this.scene.background = new THREE.Color(0x000000);
+    this.ambientLight = new THREE.AmbientLight(0xffffff);
+    this.scene.add(this.ambientLight);
+
+    this.pointLight = new THREE.PointLight();
+    this.scene.add(this.pointLight);
+
+    const buildingModel = sceneModelArr.find((group) => group.name === "BUILDINGS");
+    const roadModel = sceneModelArr.find((group) => group.name === "ROADS");
+    roadModel.traverse((child) => {
+        if (child.isMesh) {
+            child.material = new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true });
+        }
+    });
+    this.roadModelCloneArr = [];
+    this.roadModelCloneNum = 6;
+    for (let i = 0; i < this.roadModelCloneNum; i++) {
+        let x = Math.random() * 10 - 5;
+        let y = Math.random() * 5;
+        let z = Math.random() * 10 - 5;
+        const roadModelClone = roadModel.clone();
+
+        roadModelClone.traverse((child) => {
+            if (child.isMesh) {
+                child.material = new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true });
+            }
+        });
+        roadModelClone.position.set(x, y, z);
+        roadModelClone.rotateX(Math.random() * Math.PI * 2.0);
+        roadModelClone.rotateY(Math.random() * Math.PI * 2.0);
+        roadModelClone.rotateZ(Math.random() * Math.PI * 2.0);
+        this.scene.add(roadModelClone);
+        this.roadModelCloneArr.push(roadModelClone);
+    }
+
+    buildingModel.visible = false;
+
+    // VIDEO TEXTURE (if applicable)
+    this.videoTextureArr = [];
+    this.videoTextureNum = 0;
+    for (let i = 0; i < this.videoTextureNum; i++) {
+        let url = "./assets/chapter_3/stage_4/tex" + (i + 1) + ".mov";
+        const spriteVideoTexture = createVideoTexture(url);
+        this.videoTextureArr.push(spriteVideoTexture);
+    }
+
+    // STAGE-SPECIFIC MODELS IMPORT/SETUP
+    let stageModelNum = 5;
+    let scene = this.scene;
+    this.modelPath = "./assets/chapter_3/stage_3/";
+    this.stageModelArr = [];
+    let stageModelArr = this.stageModelArr;
+
+    this.animationMixerArr = [];
+
+    let animationMixerArr = this.animationMixerArr;
+    let actionArr = this.actionArr;
+
+    for (let i = 0; i < stageModelNum; i++) {
+        // TEXTURE IMPORT / SETUP
+        //const texture = this.textureLoader.load(this.modelPath + "tex" + (i + 1) + ".png");
+        //let objMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff, wireframe: false, map: texture });
+        let objMaterial = new THREE.MeshNormalMaterial();
+
+        let modelName = "mesh" + 1 + ".gltf";
+        let url = this.modelPath + modelName;
+
+        // FOR ANIMATED MODELS, EXPORT FROM HOUDINI AS GLTF, BUT THERE SHOULD BE NO CHANGE TO THE NUMBER OF
+        // VERTICES
+        this.gltfLoader.load(url, function (gltf) {
+            gltf.scene.traverse(function (child) {
+                if (child.isMesh) {
+                    child.material = objMaterial;
+                }
+            });
+            // console.log("ANIMATION LANGTH : ", object.animations.length);
+            // const mixer = new THREE.AnimationMixer(object);
+            // const action = mixer.clipAction(object.animations[0]);
+            // action.play();
+
+            //object.scale.set(1, 1, 1);
+            scene.add(gltf.scene);
+
+            let x, y, z;
+            if (i == 0) {
+                x = y = z = 0;
+            } else {
+                x = Math.random() * 10 - 5;
+                y = Math.random() * 5;
+                z = Math.random() * 10 - 5;
+            }
+            gltf.scene.position.set(x, y, z);
+            stageModelArr.push(gltf.scene);
+
+            const mixer = new THREE.AnimationMixer(gltf.scene);
+            const animationClip = gltf.animations[0];
+            const action = mixer.clipAction(animationClip);
+
+            animationMixerArr.push(mixer);
+            action.startAt(Math.random() * 2.6);
+            action.play();
+        });
+    }
+
+    this.playerCollider.moveSpeed = 2.0;
+};
+scene12.updateScene = function (camera, songProgress) {
+    this.pointLight.position.copy(camera.position);
+
+    this.frameCount++;
+
+    const currentPos = new THREE.Vector3();
+    currentPos.copy(camera.position);
+    let actionArr = this.actionArr;
+    let modelInitialPosArr = this.modelInitialPosArr;
+    this.animationMixerArr.forEach((mixer, i) => {
+        mixer.update(0.01);
+    });
+    this.roadModelCloneArr.forEach((model) => {
+        model.rotateX(0.001);
+        model.rotateY(0.001);
+        model.rotateZ(0.001);
     });
 };
 
@@ -1915,6 +2150,6 @@ SceneBuilder.sceneBuilderArr = [
     // chapter 3
     scene10,
     scene11,
-    scene10,
+    scene12,
     scene13,
 ];

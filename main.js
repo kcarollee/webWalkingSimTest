@@ -11,34 +11,40 @@ import SceneLoader from "./js/SceneLoader.js";
 import PlayerCollider from "./js/PlayerCollider.js";
 
 function main() {
+    if (isMobile) return;
+    const volumeSlider = document.getElementById("volume-slider");
+    const volumeValueDisplay = document.getElementById("volume-value");
+    const speedSlider = document.getElementById("speed-slider");
+    const speedValueDisplay = document.getElementById("speed-value");
+
     const canvas = document.querySelector("#c");
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
     renderer.outputColorSpace = THREE.SRGBColorSpace;
 
     //GUI
-    const gui = new dat.GUI();
-    let shaderViewOn = true;
-    const controls = new (function () {
-        this.outputObj = function () {
-            scene.children.forEach((c) => console.log(c));
-        };
-    })();
+    // const gui = new dat.GUI();
+    // let shaderViewOn = true;
+    // const controls = new (function () {
+    //     this.outputObj = function () {
+    //         scene.children.forEach((c) => console.log(c));
+    //     };
+    // })();
 
-    const debugSettings = {
-        shaderViewOn: true,
-        debugPathViewOn: false,
-        pathPhysicsTest: false,
-    };
+    // const debugSettings = {
+    //     shaderViewOn: true,
+    //     debugPathViewOn: false,
+    //     pathPhysicsTest: false,
+    // };
 
-    gui.add(controls, "outputObj");
+    // gui.add(controls, "outputObj");
 
-    gui.add(debugSettings, "shaderViewOn");
-    gui.add(debugSettings, "debugPathViewOn").onChange((value) => {
-        sceneLoader.playerPathColliderDebugMaterial.visible = value;
-    });
-    gui.add(debugSettings, "pathPhysicsTest").onChange((value) => {
-        console.log(sceneLoader.getPathPhysicsBody());
-    });
+    // gui.add(debugSettings, "shaderViewOn");
+    // gui.add(debugSettings, "debugPathViewOn").onChange((value) => {
+    //     sceneLoader.playerPathColliderDebugMaterial.visible = value;
+    // });
+    // gui.add(debugSettings, "pathPhysicsTest").onChange((value) => {
+    //     console.log(sceneLoader.getPathPhysicsBody());
+    // });
 
     //CAMERA
     const fov = 90;
@@ -321,7 +327,7 @@ function main() {
             soundContextOffset = sound.context.currentTime;
             //transitionTriggered = false;
             // turn on shader
-            debugSettings.shaderViewOn = true;
+            //debugSettings.shaderViewOn = true;
             previousChapter = currentChapter;
             currentChapter = Number(this.getAttribute("data-chapter"));
             currentTrackElement = this;
@@ -386,7 +392,7 @@ function main() {
         audioLoader.load(trackURL, (buffer) => {
             sound.setBuffer(buffer);
             sound.setLoop(false);
-            sound.setVolume(1);
+            sound.setVolume(volumeSlider.value);
             sound.play();
         });
     }
@@ -455,6 +461,8 @@ function main() {
 
     playerControls.addEventListener("lock", () => {
         overlay.style.display = "none";
+        const sliders = document.querySelectorAll(".slider-wrapper");
+        sliders.forEach((slider) => [(slider.style.display = "none")]);
     });
 
     playerControls.addEventListener("unlock", () => {
@@ -462,6 +470,9 @@ function main() {
         //sound.pause();
         resetTrackListStrings();
         overlay.style.display = "flex";
+
+        const sliders = document.querySelectorAll(".slider-wrapper");
+        sliders.forEach((slider) => [(slider.style.display = "flex")]);
     });
 
     function updatePhysics(deltaTime) {
@@ -540,27 +551,28 @@ function main() {
                 if (tick2 % 3 == 0) tick += 1;
                 tick2 += 1;
             }
-            if (debugSettings.shaderViewOn) {
-                renderPass.scene = introScene;
-                renderPass.camera = introCamera;
-                composer.render();
-            } else {
-                renderer.render(introScene, introCamera);
-            }
+            // if (debugSettings.shaderViewOn) {
+            renderPass.scene = introScene;
+            renderPass.camera = introCamera;
+            composer.render();
+            // } else {
+            //     renderer.render(introScene, introCamera);
+            // }
 
             //renderer.render(introScene, introCamera);
         } else {
-            if (debugSettings.shaderViewOn) {
-                renderPass.camera = camera;
-                renderPass.scene = sceneLoader.getScene();
-                composer.render();
+            // if (debugSettings.shaderViewOn) {
+            renderPass.camera = camera;
+            renderPass.scene = sceneLoader.getScene();
+            composer.render();
 
-                shaderPass.uniforms.resolution.value = new THREE.Vector2(window.innerWidth, window.innerHeight);
-                shaderPass.uniforms.time.value = deltaTime * 10.0;
-                shaderPass.uniforms.frameCount.value = frameCount;
-            } else {
-                renderer.render(sceneLoader.getScene(), camera);
-            }
+            shaderPass.uniforms.resolution.value = new THREE.Vector2(window.innerWidth, window.innerHeight);
+            shaderPass.uniforms.time.value = deltaTime * 10.0;
+            shaderPass.uniforms.frameCount.value = frameCount;
+            // }
+            // else {
+            //     renderer.render(sceneLoader.getScene(), camera);
+            // }
         }
     }
 
@@ -575,6 +587,16 @@ function main() {
         }
         return needResize;
     }
+
+    volumeSlider.addEventListener("input", () => {
+        volumeValueDisplay.textContent = Math.round(volumeSlider.value * 100) + "%";
+        sound.setVolume(volumeSlider.value);
+    });
+
+    speedSlider.addEventListener("input", () => {
+        speedValueDisplay.textContent = Math.round(speedSlider.value * 100) + "%";
+        playerCollider.moveSpeed = speedSlider.value * 4.0;
+    });
 
     requestAnimationFrame(render);
 }

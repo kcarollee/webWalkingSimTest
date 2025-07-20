@@ -229,19 +229,19 @@ const CustomShader = {
                     break;
                 case 4:
                     newUV = vUv.xy;
-                    newUV.x += noise(newUV * 100.0) * 0.01;
+                    newUV.x += noise(newUV * 100.0 + frameCount) * 0.01;
                     newSceneTex = texture2D(tDiffuse, newUV).rgb;
 
                     outCol.r += newSceneTex.r;
 
                     newUV = vUv.xy;
-                    newUV.x += noise(newUV * 150.0) * 0.015;
+                    newUV.x += noise(newUV * 150.0 + frameCount) * 0.015;
                     newSceneTex = texture2D(tDiffuse, newUV).rgb;
 
                     outCol.g += newSceneTex.g;
 
                     newUV = vUv.xy;
-                    newUV.x += noise(newUV * 120.0) * 0.02;
+                    newUV.x += noise(newUV * 120.0 + frameCount) * 0.02;
                     newSceneTex = texture2D(tDiffuse, newUV).rgb;
 
                     outCol.b += newSceneTex.b;
@@ -267,6 +267,13 @@ const CustomShader = {
                     break;
                 case 10:
                     outCol += dither(uv);
+                    break;
+                case 11:
+                    outCol += sceneTex;
+                    break;
+                case 12:
+                    outCol += sceneTex;
+                    outCol += 2.0 * bloom();
                     break;
                 default:
                     outCol = sceneTex;
