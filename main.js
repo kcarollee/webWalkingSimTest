@@ -16,6 +16,8 @@ function main() {
     const volumeValueDisplay = document.getElementById("volume-value");
     const speedSlider = document.getElementById("speed-slider");
     const speedValueDisplay = document.getElementById("speed-value");
+    const resumeButton = document.querySelector(".resume-button");
+    const descTextElem = document.querySelector(".desc-text");
 
     const canvas = document.querySelector("#c");
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
@@ -466,6 +468,9 @@ function main() {
 
         const infoText = document.querySelector(".info-text");
         infoText.style.display = "none";
+
+        resumeButton.style.display = "none";
+        descTextElem.style.display = "none";
     });
 
     playerControls.addEventListener("unlock", () => {
@@ -476,6 +481,9 @@ function main() {
 
         const sliders = document.querySelectorAll(".slider-wrapper");
         sliders.forEach((slider) => [(slider.style.display = "flex")]);
+
+        resumeButton.style.display = "flex";
+        //descTextElem.style.display = "inline-block";
     });
 
     function updatePhysics(deltaTime) {
@@ -602,6 +610,14 @@ function main() {
     speedSlider.addEventListener("input", () => {
         speedValueDisplay.textContent = Math.round(speedSlider.value * 100) + "%";
         playerCollider.moveSpeed = speedSlider.value * 4.0;
+    });
+
+    resumeButton.addEventListener("click", () => {
+        if (!playerControls.isLocked) {
+            playerControls.lock();
+            //sound.play();
+            pause = false;
+        }
     });
 
     requestAnimationFrame(render);

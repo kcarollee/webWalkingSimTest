@@ -585,8 +585,8 @@ scene4.defineScene = function (sceneModelArr, shaderPass, playerPath) {
         });
     }
 
-    this.playerCollider.moveSpeed = 3;
-    setSpeedSliderValue(3);
+    this.playerCollider.moveSpeed = 2;
+    setSpeedSliderValue(2);
 };
 
 scene4.updateScene = function () {
@@ -1133,6 +1133,8 @@ scene8.defineScene = function (sceneModelArr, shaderPass, playerPath) {
         this.videoTextureArr.push(spriteVideoTexture);
     }
 
+    this.eyeVideoTexture = createVideoTexture("./assets/chapter_2/stage_8/eyeTex.mov");
+
     const bgVideoTexture = createVideoTexture("./assets/chapter_2/stage_8/bg.mov");
 
     // SPRITES
@@ -1259,58 +1261,46 @@ scene8.defineScene = function (sceneModelArr, shaderPass, playerPath) {
     this.shaderPass.uniforms.stageNumber.value = 8;
 
     // STAGE-SPECIFIC MODELS IMPORT/SETUP
-    let stageModelNum = 0;
+    let stageModelNum = 30;
     let scene = this.scene;
-    this.modelPath = "./assets/chapter_2/stage_6/";
+    this.modelPath = "./assets/chapter_2/stage_8/";
     this.stageModelArr = [];
     let stageModelArr = this.stageModelArr;
-
-    this.animationMixerArr = [];
-    let animationMixerArr = this.animationMixerArr;
+    let eyeTexture = this.textureLoader.load("./assets/chapter_2/stage_8/eyeTex.png");
+    let objMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: false, map: eyeTexture });
 
     for (let i = 0; i < stageModelNum; i++) {
         // TEXTURE IMPORT / SETUP
         //const texture = this.textureLoader.load(this.modelPath + "tex" + (i + 1) + ".png");
         //let objMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff, wireframe: false, map: texture });
-        let objMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
 
-        let modelName = "mesh" + (i + 1) + ".fbx";
+        let modelName = "eye.gltf";
         let url = this.modelPath + modelName;
 
-        this.fbxLoader.load(url, function (object) {
-            object.scale.set(0.25, 0.25, 0.25);
-            //object.translateZ(5.0);
-            object.traverse(function (child) {
-                if (child.isMesh) {
-                    child.material = objMaterial;
+        this.gltfLoader.load(url, function (gltf) {
+            // gltf.scene.traverse(function (child) {
+            //     if (i % 2 == 0)
+            //         if (child.isMesh) {
+            //             //child.material = objMaterial;
+            //         }
+            // });
+            let x = Math.random() - 0.5;
+            let y = Math.random() - 0.5 + 1;
+            let z = Math.random() - 0.5;
 
-                    const geometry = child.geometry;
-                    const positionAttribute = geometry.attributes.position;
-                    for (let i = 0; i < positionAttribute.count; i++) {
-                        const x = positionAttribute.getX(i);
-                        const y = positionAttribute.getY(i);
-                        const z = positionAttribute.getZ(i);
+            //object.scale.set(1, 1, 1);
+            gltf.scene.position.set(x, y, z);
+            let scale = Math.random() * 0.2 + 0.2;
+            gltf.scene.scale.set(scale, scale, scale);
+            gltf.scene.rotateX(Math.random() * Math.PI * 2.0);
+            gltf.scene.rotateY(Math.random() * Math.PI * 2.0);
+            gltf.scene.rotateZ(Math.random() * Math.PI * 2.0);
+            scene.add(gltf.scene);
 
-                        let spriteMaterialIndex = Math.floor(Math.random() * 3);
-                        const sprite = new THREE.Sprite(spriteMaterialArr[spriteMaterialIndex]);
-                        const localPos = new THREE.Vector3(x, y, z);
-                        const worldPos = child.localToWorld(localPos.clone());
-                        sprite.position.copy(worldPos);
-                        sprite.scale.set(0.15, 0.15, 0.15);
-                        scene.add(sprite);
-                    }
-                }
-            });
-
-            // object.position.set(
-            //     (Math.random() - 0.5) * 2 * 20,
-            //     (Math.random() - 0.5) * 2 * 20,
-            //     (Math.random() - 0.5) * 2 * 20
-            // );
-            scene.add(object);
-            stageModelArr.push(object);
+            stageModelArr.push(gltf.scene);
         });
     }
+    noise.seed(Math.random());
     this.playerCollider.moveSpeed = 0.25;
     setSpeedSliderValue(0.25);
 };
@@ -1327,6 +1317,20 @@ scene8.updateScene = function (camera, songProgress) {
             Math.cos(this.frameCount * 0.1 * 0.3 + i * 1.5) * noiseAmplitude
         );
         sprite.position.lerp(currentPos.add(noise), 0.00025);
+    });
+
+    let frameCount = this.frameCount;
+    this.stageModelArr.forEach((model, i) => {
+        model.lookAt(camera.position);
+        const freq = 0.1; // noise frequency
+        const amp = 2; // movement amplitude
+
+        const t = frameCount * 0.01; // time scaling
+        const nx = noise.perlin3(model.position.x * freq, model.position.y * freq, t + i * 10);
+        const ny = noise.perlin3(model.position.y * freq, model.position.z * freq, t + 100 + i * 10);
+        const nz = noise.perlin3(model.position.z * freq, model.position.x * freq, t + 200 + i * 10);
+
+        model.position.set(nx * amp, ny * amp + 1.5, nz * amp);
     });
     // let scale = 0.9 + 0.05 * Math.sin(this.frameCount * 0.01);
 

@@ -1,275 +1,374 @@
+@font-face {
+	font-family: "ChosunSM";
+	src: url('./assets/fonts/ChosunSm.otf');
+}
 
 @font-face {
-   font-family: "ChosunSM";
-   src: url('./assets/fonts/ChosunSm.otf');
+	font-family: "Pretendard";
+	src: url('./assets/fonts/Pretendard-Light.otf');
 }
 
-html, body {
-   margin: 0;
-   height: 100%;
-   overflow: hidden;
+html,
+body {
+	margin: 0;
+	height: 100%;
+	overflow: hidden;
 }
+
 .mobile-only {
-   display: none;
+	display: none;
 }
 
 .desktop-only {
-   margin: 0;
-   height: 100%;
-   overflow: hidden;
- }
-
-@media (max-width: 768px) {
-   .mobile-only {
-      display: block;
-   }
-
-   .desktop-only {
-      display: none;
-   }
-
-   body {
-      margin: 0;
-      padding: 0;
-      background-color: black;
-      color: white;
-      font-family: "ChosunSM";
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      text-align: center;
-    }
-    /* Fullscreen video */
-    video.bg-video {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: -1;
-    }
-
-    .content {
-      max-width: 400px;
-      padding: 50px;
-      font-size: 14px;
-      word-break: keep-all;
-    }
-
-    .content p {
-      margin: 1em 0;
-      line-height: 1.6;
-    }
-
-    .links {
-      margin-top: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .links a {
-      color: white;
-      text-decoration: underline;
-      font-weight: bold;
-    }
-
-    .links a:hover {
-      color: #999;
-    }
+	margin: 0;
+	height: 100%;
+	overflow: hidden;
 }
 
-canvas { display: block; }
+@media (max-width: 768px) {
+	.mobile-only {
+		display: block;
+	}
+
+	.desktop-only {
+		display: none;
+	}
+
+	body {
+		margin: 0;
+		padding: 0;
+		background-color: black;
+		color: white;
+		font-family: "ChosunSM";
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		min-height: 100vh;
+		/* safer than fixed height */
+		text-align: center;
+	}
+
+	/* Fullscreen video */
+	video.bg-video {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		z-index: -1;
+	}
+
+	.content-wrapper {
+		position: relative;
+		z-index: 1;
+		max-height: 100vh;
+		overflow-y: auto;
+		-webkit-overflow-scrolling: touch;
+		/* smooth scrolling on iOS */
+	}
+
+
+	.content {
+		max-width: 500px;
+		padding: 10vw;
+		font-size: 14px;
+		word-break: keep-all;
+		box-sizing: border-box;
+	}
+
+	.content p {
+		margin: 1em 0;
+		line-height: 1.6;
+	}
+
+	.links {
+		margin-top: 50px;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		transform: scaleY(1.1);
+      line-height: 15px;
+	}
+
+	.links a {
+		color: white;
+		text-decoration: none;
+		/* Removes underline */
+      font-size: 15px;
+		font-weight: bold;
+	}
+
+	.links a:hover {
+		color: #999;
+	}
+
+	.links-external {
+		margin-top: 10px;
+		display: flex;
+		justify-content: center;
+		gap: 10px;
+		/* transform: scaleY(1.2); */
+	}
+
+
+	.links-external-main {
+		top: 10px;
+		/* margin-top: 10px; */
+		display: flex;
+		justify-content: center;
+		/* gap: 10px; */
+		/* transform: scaleY(1.2); */
+		transform: translateY(-15px);
+	}
+
+
+	.links-external a img {
+		width: 10vw;
+		max-width: 50px;
+		height: auto;
+      margin-left: 15px;
+	}
+
+	.links-external-main a img {
+		width: 15vw;
+		max-width: 50px;
+		height: auto;
+	}
+}
+
+canvas {
+	display: block;
+}
 
 
 #spectrumCanvas {
-    position: absolute;
-    bottom: 10px; 
-    left: 50%;
-    transform: translateX(-50%);
-    background: transparent;
-    pointer-events: none; 
+	position: absolute;
+	bottom: 10px;
+	left: 50%;
+	transform: translateX(-50%);
+	background: transparent;
+	pointer-events: none;
 }
 
 #c {
-   width: 100%;
-   height: 100%;
-   top: 0;
-   left: 0;
-   display: block;
-   z-index: -1; 
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	display: block;
+	z-index: -1;
 }
 
-.temp-overlay{
-   position: absolute;
-   width: 100%;
-   height: 100%;
-   background-color: rgba(0, 0, 0, 0);
-   display: flex;
-   flex-direction: column;
-   justify-content: center;
-   align-items: center;
+.temp-overlay {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
-.band-logo{
-   width: 15%;
-  display: none;
-}
-
-
-.temp-overlay-text{
-   font-family: "ChosunSM";
-   text-align: center;
-   color: white;
-   display: flex;
-   flex-direction: row;
-   justify-content: center;
-   align-items: center;
-   text-align: center;
-
-   text-align: center;
-   font-size: 20px;
-   cursor: pointer;
-   caret-color: transparent;
-}
-
-.temp-overlay-text a{
-   margin: 5px;
-   background-color: transparent;
-}
-
-.temp-overlay-text a:hover{
-   background-color: blue;
+.band-logo {
+	width: 15%;
+	display: none;
 }
 
 
-.number-link{
-   font-family: "ChosunSM";
-   font-size: 30px;
+.temp-overlay-text {
+	font-family: "ChosunSM";
+	text-align: center;
+	color: white;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
 
-   cursor: pointer;
-   position: relative;
-   padding: 5px 10px;
-   text-align: center;
-   background-color: rgba(255, 0, 0);
-   transform: scaleY(2);
-   /* top: 35vh; */
+	text-align: center;
+	font-size: 20px;
+	cursor: pointer;
+	caret-color: transparent;
+}
+
+.temp-overlay-text a {
+	margin: 5px;
+	background-color: transparent;
+}
+
+.temp-overlay-text a:hover {
+	background-color: blue;
+}
+
+
+.number-link {
+	font-family: "ChosunSM";
+	font-size: 30px;
+
+	cursor: pointer;
+	position: relative;
+	padding: 5px 10px;
+	text-align: center;
+	background-color: rgba(255, 0, 0);
+	transform: scaleY(2);
+	/* top: 35vh; */
 }
 
 /* Dropdown menu (initially hidden) */
 .dropdown {
-   position: absolute;
-   top: 100%;
-   left: 50%;
-   transform: translateX(-50%); /* Centering the dropdown */
-   /* background: transparent; */
-   background-color: red;
-   display: none;
-   flex-direction: column;
-   padding: 5px 5px;
-   min-width: 120px; /* Ensures dropdown width is stable */
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	transform: translateX(-50%);
+	/* Centering the dropdown */
+	/* background: transparent; */
+	background-color: red;
+	display: none;
+	flex-direction: column;
+	padding: 5px 5px;
+	min-width: 120px;
+	/* Ensures dropdown width is stable */
 }
 
 /* Dropdown items */
 .dropdown div {
-   padding: 5px 20px;
-   font-size: 20px;
-   white-space: nowrap;
-   cursor: pointer;
-   transition: background 0.2s;
-   text-align: center;
+	padding: 5px 20px;
+	font-size: 20px;
+	white-space: nowrap;
+	cursor: pointer;
+	transition: background 0.2s;
+	text-align: center;
 }
 
 /* Hover effect */
 .dropdown div:hover {
-   background: #ddd;
+	background: #ddd;
 }
 
 /* Show dropdown on hover */
 .number-link:hover .dropdown {
-   display: flex;
+	display: flex;
 }
 
-.info-text{
-   position: absolute;
-   bottom: 5%;
-   
-   color: white;
-   /* transform: translateY(450px); */
-   font-size: 20px;
-   font-family: "ChosunSM";
-   text-align: center;
-   line-height: 1.2;
+.info-text {
+	position: absolute;
+	bottom: 5%;
+
+	color: white;
+	/* transform: translateY(450px); */
+	font-size: 20px;
+	font-family: "ChosunSM";
+	text-align: center;
+	line-height: 1.2;
+}
+
+.desc-text {
+	position: absolute;
+	font-family: "Pretendard";
+	/* align-items: center; */
+	top: 20px;
+	right: 20px;
+	margin-top: 10px;
+	margin-left: 10px;
+	font-size: 20px;
+	text-align: right;
+
+	gap: 16px;
+	transform: scaleY(1.2);
+	background-color: black;
+	color: white;
+	display: none;
+	line-height: 1.2;
+	padding: 8px 12px;
+
+
+}
+
+.resume-button {
+	/* display: flex; */
+	font-family: "ChosunSM";
+	/* align-items: center; */
+	margin-top: 2px;
+	margin-left: 2px;
+	font-size: 25px;
+	gap: 16px;
+	transform: translateY(-100px) scaleY(1.2);
+	background-color: red;
+	color: white;
+	display: none;
+	padding: 5px 5px;
+}
+
+.resume-button:hover {
+	cursor: pointer;
+
 }
 
 .slider-wrapper {
-      /* display: flex; */
-      font-family: "ChosunSM";
-      /* align-items: center; */
-      margin-top: 2px;
-      font-size: 25px;
-      gap: 16px;
-      transform: translateY(-200px);
-      background-color: red;
-      display: none;
-    }
+	/* display: flex; */
+	font-family: "ChosunSM";
+	/* align-items: center; */
+	margin-top: 2px;
+	font-size: 25px;
+	gap: 16px;
+	transform: translateY(-200px) scaleY(1.2);
+	background-color: red;
+	display: none;
+}
 
-    .label {
-      font-weight: bold;
-      color: white;
-    }
+.label {
+	/* font-weight: bold; */
+	color: white;
+	padding: 5px 5px;
+}
 
-    input[type=range] {
-      -webkit-appearance: none;
-      width: 300px;
-      height: 2px;
-      margin-top: 12px;
-      background: white;
-    }
+input[type=range] {
+	-webkit-appearance: none;
+	width: 300px;
+	height: 2px;
+	margin-top: 18px;
+	background: white;
+}
 
-    input[type=range]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 16px;
-      height: 16px;
-      background: white;
-      cursor: pointer;
-      /* margin-top: -7px; */
-      border: none;
-      border-radius: 0;
-    }
+input[type=range]::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	width: 16px;
+	height: 16px;
+	background: white;
+	cursor: pointer;
+	/* margin-top: -7px; */
+	border: none;
+	border-radius: 0;
+}
 
-    input[type=range]::-moz-range-thumb {
-      width: 16px;
-      height: 16px;
-      background: white;
-      cursor: pointer;
-      border: none;
-      border-radius: 0;
-    }
+input[type=range]::-moz-range-thumb {
+	width: 16px;
+	height: 16px;
+	background: white;
+	cursor: pointer;
+	border: none;
+	border-radius: 0;
+}
 
-    input[type=range]::-moz-range-track {
-      height: 2px;
-      background: white;
-    }
+input[type=range]::-moz-range-track {
+	height: 2px;
+	background: white;
+}
 
-    input[type=range]::-ms-thumb {
-      width: 16px;
-      height: 16px;
-      background: white;
-      cursor: pointer;
-      border: none;
-      border-radius: 0;
-    }
+input[type=range]::-ms-thumb {
+	width: 16px;
+	height: 16px;
+	background: white;
+	cursor: pointer;
+	border: none;
+	border-radius: 0;
+}
 
-    input[type=range]::-ms-track {
-      height: 2px;
-      background: white;
-      border-color: transparent;
-      color: transparent;
-    }
-
-
-
-
+input[type=range]::-ms-track {
+	height: 2px;
+	background: white;
+	border-color: transparent;
+	color: transparent;
+}

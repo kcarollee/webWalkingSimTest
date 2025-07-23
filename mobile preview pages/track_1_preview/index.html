@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>9B2 Planet Observer Simulator</title>
+
+        <link rel="icon" type="image/x-icon" href="../../assets/logo.ico" />
+        <link rel="stylesheet" type="text/css" href="../style.css" />
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+
+        <meta property="og:title" content="9B2 Planet Observer Simulator" />
+        <meta property="og:description" content="행성 관찰자 시뮬레이터" />
+        <meta property="og:image" content="https://9b2kfk9b2.xyz/assets/homeImages/preview.png" />
+        <meta property="og:url" content="https://9b2kfk9b2.xyz/index.html" />
+        <meta property="og:type" content="website" />
+    </head>
+
+    <body>
+        <audio autoplay loop hidden>
+            <source src="../../assets/audio/rushhour.mp3" type="audio/mpeg" />
+            Your browser does not support the audio element.
+        </audio>
+        <video class="bg-video" autoplay muted loop playsinline>
+            <source src="../../assets/mobilebg/bgVid1.mov" type="video/mp4" />
+        </video>
+
+        <div class="menu">{"_ _TRACKLIST_ _"}</div>
+        <div class="links">
+            <a href="../track_1_preview/index.html">{"_ _Rush Hour_ _"}</a>
+            <a href="../track_2_preview/index.html">{"_ _Kill the Monkey_ _"}</a>
+            <a href="../track_3_preview/index.html">{"_ _초록광선_ _"}</a>
+            <a href="../track_4_preview/index.html">{"_ _레몬홍차_ _"}</a>
+            <a href="../track_5_preview/index.html">{"_ _여러가지_ _"}</a>
+            <a href="../track_6_preview/index.html">{"_ _시계열_ _"}</a>
+            <a href="../track_7_preview/index.html">{"_ _꼬리뼈_ _"}</a>
+            <a href="../track_8_preview/index.html">{"_ _소녀_ _"}</a>
+            <a href="../track_9_preview/index.html">{"_ _멍_ _"}</a>
+            <a href="../track_10_preview/index.html">{"_ _에땅도네_ _"}</a>
+            <a href="../track_11_preview/index.html">{"_ _소각소각_ _"}</a>
+            <a href="../track_12_preview/index.html">{"_ _Kamikaze Bloom_ _"}</a>
+            <a href="../track_13_preview/index.html">{"_ _982_ _"}</a><br /><br />
+            <a href="../../index.html">HOME</a>
+        </div>
+    </body>
+
+    <script>
+        const menuButton = document.querySelector(".menu");
+        const trackList = document.querySelector(".links");
+        let clickNum = 0;
+        menuButton.addEventListener("click", (e) => {
+            if (clickNum % 2 == 0) trackList.style.display = "flex";
+            else trackList.style.display = "none";
+            clickNum++;
+        });
+    </script>
+</html>

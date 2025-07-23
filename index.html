@@ -5,10 +5,17 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.min.js"></script>
         <script src="https://cdn.rawgit.com/mrdoob/stats.js/r17/build/stats.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.7/gsap.min.js"></script>
+        <script src="./js/noise.js"></script>
         <link rel="icon" type="image/x-icon" href="./assets/logo.ico" />
         <link rel="stylesheet" type="text/css" href="style.css" />
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+
+        <meta property="og:title" content="9B2 Planet Observer Simulator" />
+        <meta property="og:description" content="행성 관찰자 시뮬레이터" />
+        <meta property="og:image" content="https://9b2kfk9b2.xyz/assets/homeImages/preview.png" />
+        <meta property="og:url" content="https://9b2kfk9b2.xyz/index.html" />
+        <meta property="og:type" content="website" />
     </head>
     <script type="importmap">
         {
@@ -21,27 +28,97 @@
     <script src="./js/CustomShader.js"></script>
 
     <script src="./js/sceneDef.js"></script>
-
+    <script src="./js/songDescriptions.js"></script>
     <script type="module" src="main.js"></script>
     <body>
         <div class="mobile-only">
             <video class="bg-video" autoplay muted loop playsinline>
                 <source src="./assets/video/mobilebg.mov" type="video/mp4" />
             </video>
-            <div class="content">
-                <p>
-                    9B2의 행성 관찰자 시뮬레이터는 데스크탑 환경에서 실행해주시기 바랍니다.<br /><br />
-                    9B2's Planet Observer Simulator is only available for desktop.
-                </p>
-                <br />
-                <p>Checkout "Kick, Fuck, Kill" on the following platforms:</p>
+            <div class="content-wrapper">
+                <div class="content">
+                    <div class="links-external-main">
+                        <!-- <a
+                        href="https://open.spotify.com/album/3lOhcCciVGTm92eI5vbRqq?si=9o4zUd8-ShOg40S8jeVPtA"
+                        target="_blank"
+                        >SPOTIFY</a
+                    ><br />
+                    <a href="https://www.melon.com/album/detail.htm?albumId=11908360" target="_blank">MELON</a><br />
 
-                <div class="links">
-                    <a href="https://example.com/kick" target="_blank">SPOTIFY</a><br />
-                    <a href="https://example.com/fuck" target="_blank">MELON</a><br />
-                    <a href="https://example.com/kill" target="_blank">YOUTUBE</a><br />
-                    <a href="https://example.com/other" target="_blank">BUGS</a><br /><br />
-                    <a href="https://www.instagram.com/band_9b2/" target="_blank">@band_9b2</a><br />
+                    <a href="https://music.apple.com/us/album/kick-fuck-kill/1826771069" target="_blank">APPLE MUSIC</a
+                    ><br />
+                    <a
+                        href="https://music.youtube.com/playlist?list=OLAK5uy_m3l-DQLLEEiN3BmVKquS7317FOTcSOKhM&si=4Je4s7NKzvAyo5Xm"
+                        target="_blank"
+                        >YOUTUBE MUSIC</a
+                    ><br /><br /><br />
+                    <a href="https://www.instagram.com/band_9b2/" target="_blank">@band_9b2</a><br /> -->
+                        <a href="https://www.instagram.com/band_9b2/" target="_blank"
+                            ><img src="./assets/logos/9b2 logo vector 2-01.png" alt="Icon 1"
+                        /></a>
+                    </div>
+                    <p>
+                        9B2의 행성 관찰자 시뮬레이터는 데스크탑 환경에서 실행해주시기 바랍니다.<br /><br />
+                        9B2's Planet Observer Simulator is only available for desktop.
+                    </p>
+                    <br />
+                    <p>SIMULATOR PREVIEWS:</p>
+
+                    <div class="links">
+                        <a href="./mobile preview pages/index_1.html">{"_ _Rush Hour_ _"}</a>
+                        <a href="./mobile preview pages/index_2.html">{"_ _Kill the Monkey_ _"}</a>
+                        <a href="./mobile preview pages/index_3.html">{"_ _초록광선_ _"}</a>
+                        <a href="./mobile preview pages/index_4.html">{"_ _레몬홍차_ _"}</a>
+                        <a href="./mobile preview pages/index_5.html">{"_ _여러가지_ _"}</a>
+                        <a href="./mobile preview pages/index_6.html">{"_ _시계열_ _"}</a>
+                        <a href="./mobile preview pages/index_7.html">{"_ _꼬리뼈_ _"}</a>
+                        <a href="./mobile preview pages/index_8.html">{"_ _소녀_ _"}</a>
+                        <a href="./mobile preview pages/index_9.html">{"_ _멍_ _"}</a>
+                        <a href="./mobile preview pages/index_10.html">{"_ _에땅도네_ _"}</a>
+                        <a href="./mobile preview pages/index_11.html">{"_ _소각소각_ _"}</a>
+                        <a href="./mobile preview pages/index_12.html">{"_ _Kamikaze Bloom_ _"}</a>
+                        <a href="./mobile preview pages/index_13.html">{"_ _982__"}</a>
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+
+                    <p>Checkout "Kick, Fuck, Kill" on the following platforms:</p>
+                    <br />
+                    <div class="links-external">
+                        <!-- <a
+                        href="https://open.spotify.com/album/3lOhcCciVGTm92eI5vbRqq?si=9o4zUd8-ShOg40S8jeVPtA"
+                        target="_blank"
+                        >SPOTIFY</a
+                    ><br />
+                    <a href="https://www.melon.com/album/detail.htm?albumId=11908360" target="_blank">MELON</a><br />
+
+                    <a href="https://music.apple.com/us/album/kick-fuck-kill/1826771069" target="_blank">APPLE MUSIC</a
+                    ><br />
+                    <a
+                        href="https://music.youtube.com/playlist?list=OLAK5uy_m3l-DQLLEEiN3BmVKquS7317FOTcSOKhM&si=4Je4s7NKzvAyo5Xm"
+                        target="_blank"
+                        >YOUTUBE MUSIC</a
+                    ><br /><br /><br />
+                    <a href="https://www.instagram.com/band_9b2/" target="_blank">@band_9b2</a><br /> -->
+                        <a
+                            href="https://open.spotify.com/album/3lOhcCciVGTm92eI5vbRqq?si=9o4zUd8-ShOg40S8jeVPtA"
+                            target="_blank"
+                            ><img src="./assets/logos/spotify logo.png" alt="Icon 1"
+                        /></a>
+                        <a href="https://www.melon.com/album/detail.htm?albumId=11908360" target="_blank"
+                            ><img src="./assets/logos/melon logo.png" alt="Icon 2"
+                        /></a>
+                        <a href="https://music.apple.com/us/album/kick-fuck-kill/1826771069" target="_blank"
+                            ><img src="./assets/logos/apple logo.png" alt="Icon 3"
+                        /></a>
+                        <a
+                            href="https://music.youtube.com/playlist?list=OLAK5uy_m3l-DQLLEEiN3BmVKquS7317FOTcSOKhM&si=4Je4s7NKzvAyo5Xm"
+                            target="_blank"
+                            ><img src="./assets/logos/yt logo.png" alt="Icon 4"
+                        /></a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -59,11 +136,21 @@
                     <div class="label" id="speed-value">50%</div>
                 </div>
                 <div class="info-text"></div>
+                <div class="desc-text"></div>
+
+                <div class="resume-button">RESUME</div>
                 <div class="temp-overlay-text">
                     <div class="number-link">
                         <span class="chapter-name"></span>
                         <div class="dropdown">
-                            <div class="track" data-scene="0" data-next="1" data-chapter="1" data-status="CLEARED">
+                            <div
+                                class="track"
+                                data-scene="0"
+                                data-next="1"
+                                data-chapter="1"
+                                data-status="CLEARED"
+                                data-tracknumber="1"
+                            >
                                 초록광선
                             </div>
                             <div
@@ -72,6 +159,7 @@
                                 data-next="2"
                                 data-chapter="1"
                                 data-status="CLEARED"
+                                data-tracknumber="2"
                                 style="color: white"
                             >
                                 레몬홍차
@@ -82,6 +170,7 @@
                                 data-next="3"
                                 data-chapter="1"
                                 data-status="CLEARED"
+                                data-tracknumber="3"
                                 style="color: white"
                             >
                                 여러가지
@@ -92,6 +181,7 @@
                                 data-next="4"
                                 data-chapter="1"
                                 data-status="CLEARED"
+                                data-tracknumber="4"
                                 style="color: white"
                             >
                                 시계열
@@ -102,6 +192,7 @@
                                 data-next="0"
                                 data-chapter="1"
                                 data-status="CLEARED"
+                                data-tracknumber="5"
                                 style="color: white"
                             >
                                 꼬리뼈
@@ -117,6 +208,7 @@
                                 data-next="6"
                                 data-chapter="2"
                                 data-status="CLEARED"
+                                data-tracknumber="6"
                                 style="color: white"
                             >
                                 소녀
@@ -127,6 +219,7 @@
                                 data-next="7"
                                 data-chapter="2"
                                 data-status="CLEARED"
+                                data-tracknumber="7"
                                 style="color: white"
                             >
                                 멍
@@ -137,6 +230,7 @@
                                 data-next="8"
                                 data-chapter="2"
                                 data-status="CLEARED"
+                                data-tracknumber="8"
                                 style="color: white"
                             >
                                 에땅도네
@@ -147,6 +241,7 @@
                                 data-next="5"
                                 data-chapter="2"
                                 data-status="CLEARED"
+                                data-tracknumber="9"
                                 style="color: white"
                             >
                                 소각소각
@@ -162,6 +257,7 @@
                                 data-next="10"
                                 data-chapter="3"
                                 data-status="CLEARED"
+                                data-tracknumber="10"
                                 style="color: white"
                             >
                                 러시아워
@@ -172,6 +268,7 @@
                                 data-next="11"
                                 data-chapter="3"
                                 data-status="CLEARED"
+                                data-tracknumber="11"
                                 style="color: white"
                             >
                                 KILL THE MONKEY
@@ -182,6 +279,7 @@
                                 data-next="12"
                                 data-chapter="3"
                                 data-status="CLEARED"
+                                data-tracknumber="12"
                                 style="color: white"
                             >
                                 KAMIKAZE BLOOM
@@ -192,6 +290,7 @@
                                 data-next="9"
                                 data-chapter="3"
                                 data-status="CLEARED"
+                                data-tracknumber="13"
                                 style="color: white"
                             >
                                 982
@@ -232,18 +331,36 @@
             return check;
         };
         const isMobile = window.mobileCheck();
-        console.log(isMobile);
+        //console.log(isMobile);
+
         const chapterListStrings = [
-            "{ _ _ CHAPTER_01 : KICK _ _ }",
-            "{ _ _ CHAPTER_02 : FUCK _ _ }",
-            "{ _ _ CHAPTER_03 : KILL _ _ }",
+            '{ " _ _ CHAPTER_01 : KICK _ _ " }',
+            '{ " _ _ CHAPTER_02 : FUCK _ _ " }',
+            '{ " _ _ CHAPTER_03 : KILL _ _ " }',
         ];
         const infoText =
-            "행성 관찰자 시뮬레이터\n\nWASD + Mouse to move\n광과민성 반응 주의 (Flashing Graphics Warning)";
+            "행성 관찰자 시뮬레이터 v1.1\n\nWASD + Mouse to move, ESC for menu\n광과민성 반응 주의 (Warning: Flashing Visuals)";
         let infoTextIndex = 0;
         let stringIndices = [0, 0, 0];
 
         let stringDoneLoading = [0, 0, 0];
+        const descTextElem = document.querySelector(".desc-text");
+        const trackNames = document.querySelectorAll(".track");
+        trackNames.forEach((track, i) => {
+            track.addEventListener("mouseenter", (e) => {
+                let trackNumber = parseInt(track.dataset.tracknumber);
+                let descText = songDescriptionStrings[trackNumber - 1];
+                descTextElem.innerHTML = descText;
+                descTextElem.style.display = "inline-block";
+            });
+        });
+
+        trackNames.forEach((track, i) => {
+            track.addEventListener("mouseleave", (e) => {
+                descTextElem.innerHTML = "";
+                descTextElem.style.display = "none";
+            });
+        });
         function triggerTrackListAnimation() {
             // console.log(allTrackListStringsLoaded());
             document.querySelectorAll(".chapter-name").forEach((entry, i) => {
